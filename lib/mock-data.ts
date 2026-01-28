@@ -1,0 +1,86 @@
+import { ClassDetailResponse, ReservationItem, ReservationDetail } from './api-config';
+
+// 강사 정보 (참고용)
+export const mockInstructor = {
+  id: 1,
+  businessName: '취미 공작소',
+  email: 'hobby@gmail.com',
+  name: '김강사',
+  phoneNumber: '010-1234-5678',
+};
+
+// 클래스 데이터
+export const mockClasses: Record<string, ClassDetailResponse> = {
+  test: {
+    id: 1,
+    title: '감성 가득 달항아리 만들기',
+    imageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
+    description: '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.',
+    location: '서울 성동구 연무장길 45',
+    locationDescription: '성수역 근처 카페 거리 내 위치',
+    price: 60000,
+    material: '백자토, 조각도, 앞치마 (모두 제공)',
+    parkingInfo: '주차 공간이 협소하니 가급적 대중교통 이용 부탁드립니다.',
+    guidelines: '흙이 묻을 수 있으니 편한 복장으로 오세요.',
+    policy: '당일 취소는 환불이 불가합니다.',
+    sessions: [
+      {
+        sessionId: 1,
+        date: '2025-02-15',
+        startTime: '14:00:00',
+        endTime: '16:00:00',
+        capacity: 8,
+        currentNum: 3,
+        status: 'RECRUITING',
+      },
+      {
+        sessionId: 2,
+        date: '2025-02-16',
+        startTime: '10:00:00',
+        endTime: '12:00:00',
+        capacity: 8,
+        currentNum: 8,
+        status: 'FULL',
+      },
+      {
+        sessionId: 3,
+        date: '2025-02-22',
+        startTime: '14:00:00',
+        endTime: '16:00:00',
+        capacity: 8,
+        currentNum: 5,
+        status: 'RECRUITING',
+      },
+    ],
+  },
+};
+
+// 예약 목록 (검색 결과용)
+export const mockReservationList: ReservationItem[] = [
+  {
+    reservationId: 1,
+    classTitle: '감성 가득 달항아리 만들기',
+    date: '2025-02-15',
+    startTime: '14:00:00',
+    endTime: '16:00:00',
+    applicantName: '홍길동',
+  },
+];
+
+// 예약 상세
+export const mockReservationDetails: Record<number, ReservationDetail> = {
+  1: {
+    reservationId: 1,
+    classTitle: '감성 가득 달항아리 만들기',
+    classImageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
+    classLocation: '서울 성동구 연무장길 45',
+    date: '2025-02-15',
+    startTime: '14:00:00',
+    endTime: '16:00:00',
+    applicantName: '홍길동',
+    phoneNumber: '010-9876-5432',
+    capacity: 8,
+    currentNum: 3,
+    sessionStatus: 'RECRUITING',
+  },
+};

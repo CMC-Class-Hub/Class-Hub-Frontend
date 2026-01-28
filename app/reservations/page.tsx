@@ -92,7 +92,7 @@ export default function CheckReservationPage() {
                             <div className="text-center py-10 text-gray-400 text-sm">정보를 입력하여 내역을 확인하세요.</div>
                         ) : reservations.length === 0 ? (
                             <div className="text-center py-10 text-gray-400 text-sm">
-                                예약 내역이 없습니다.<br/>
+                                예약 내역이 없습니다.<br />
                                 이름과 연락처를 확인해주세요.
                             </div>
                         ) : (
@@ -100,12 +100,12 @@ export default function CheckReservationPage() {
                                 {reservations.map((res) => (
                                     <li key={res.reservationId}>
                                         <button
-                                            onClick={() => router.push(`/reservation/${res.reservationId}`)}
+                                            onClick={() => router.push(`/reservations/${res.reservationId}`)}
                                             className="w-full bg-white border border-gray-200 p-4 rounded-xl shadow-sm text-left hover:border-[#3182F6] transition-colors"
                                         >
                                             <div className="font-bold text-[#333D4B] mb-1">{res.classTitle}</div>
                                             <div className="text-sm text-[#8B95A1]">
-                                                {res.date} · {res.startTime.slice(0,5)}
+                                                {res.date} · {res.startTime.slice(0, 5)}
                                             </div>
                                             <div className="mt-2 text-xs text-blue-600 font-bold bg-blue-50 inline-block px-2 py-1 rounded">
                                                 신청완료

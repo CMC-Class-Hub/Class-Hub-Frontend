@@ -95,12 +95,12 @@ export default function ClassEnrollmentPage() {
                     {session && (
                         <div className="flex justify-between text-sm">
                             <span className="text-gray-500">일시</span>
-                            <span className="font-bold text-[#333D4B]">{session.date} {session.startTime.slice(0,5)}</span>
+                            <span className="font-bold text-[#333D4B]">{session.date} {session.startTime.slice(0, 5)}</span>
                         </div>
                     )}
                 </div>
                 <button
-                    onClick={() => router.push(`/reservation/${completedReservationId}`)}
+                    onClick={() => router.push(`/reservations/${completedReservationId}`)}
                     className="w-full py-3.5 bg-[#3182F6] text-white rounded-xl font-bold text-base hover:bg-[#1B64DA] transition-colors"
                 >
                     신청 내역 확인
@@ -121,7 +121,7 @@ export default function ClassEnrollmentPage() {
                     <span className="font-bold text-[#191F28] text-sm mx-auto">클래스 예약</span>
 
                     <Link
-                        href="/reservation/check"
+                        href="/reservations"
                         className="absolute right-4 text-xs font-bold text-[#8B95A1] bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 hover:bg-gray-100 hover:text-[#333D4B] transition-colors"
                     >
                         신청내역
@@ -165,9 +165,8 @@ export default function ClassEnrollmentPage() {
                                                     key={session.sessionId}
                                                     disabled={isFull}
                                                     onClick={() => { setSelectedSessionId(session.sessionId); setErrorMessage(''); }}
-                                                    className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${
-                                                        isSelected ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]' : 'border-gray-200 bg-white hover:bg-gray-50'
-                                                    } ${isFull ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100' : ''}`}
+                                                    className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${isSelected ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]' : 'border-gray-200 bg-white hover:bg-gray-50'
+                                                        } ${isFull ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100' : ''}`}
                                                 >
                                                     <div>
                                                         <div className={`font-bold text-sm ${isSelected ? 'text-[#1B64DA]' : 'text-[#333D4B]'}`}>{session.date}</div>
@@ -204,7 +203,7 @@ export default function ClassEnrollmentPage() {
                                 <div className="bg-blue-50 p-4 rounded-xl mb-6 border border-blue-100">
                                     <h3 className="text-xs font-bold text-blue-500 mb-1">선택한 일정</h3>
                                     <p className="text-sm font-bold text-[#191F28]">
-                                        {getSelectedSession()?.date} {getSelectedSession()?.startTime.slice(0,5)}
+                                        {getSelectedSession()?.date} {getSelectedSession()?.startTime.slice(0, 5)}
                                     </p>
                                 </div>
 
@@ -248,9 +247,8 @@ export default function ClassEnrollmentPage() {
                         <button
                             onClick={() => setStep('INPUT')}
                             disabled={!selectedSessionId}
-                            className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${
-                                !selectedSessionId ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
-                            }`}
+                            className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${!selectedSessionId ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
+                                }`}
                         >
                             신청하기
                         </button>
@@ -258,9 +256,8 @@ export default function ClassEnrollmentPage() {
                         <button
                             onClick={handleReserve}
                             disabled={!applicantName || !phoneNumber}
-                            className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${
-                                (!applicantName || !phoneNumber) ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
-                            }`}
+                            className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${(!applicantName || !phoneNumber) ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
+                                }`}
                         >
                             신청하기
                         </button>
