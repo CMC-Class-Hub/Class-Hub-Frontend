@@ -52,10 +52,10 @@ export default function ReservationDetailPage() {
                     {/* 상단 상태 텍스트 */}
                     <div>
                         <h2 className="text-2xl font-bold text-[#191F28] leading-tight mb-2">
-                            예약이<br/>확정되었습니다.
+                            예약이<br />확정되었습니다.
                         </h2>
                         <p className="text-sm text-[#8B95A1]">
-                            신청하신 클래스 정보입니다.<br/>
+                            예약하신 클래스 정보입니다.<br />
                             변동 사항이 있을 시 강사님이 연락드릴 예정입니다.
                         </p>
                     </div>
@@ -90,7 +90,7 @@ export default function ReservationDetailPage() {
                                 </div>
                                 <div>
                                     <div className="text-xs font-bold text-[#8B95A1] mb-1">시간</div>
-                                    <div className="font-medium text-[#333D4B]">{detail.startTime.slice(0,5)} ~ {detail.endTime.slice(0,5)}</div>
+                                    <div className="font-medium text-[#333D4B]">{detail.startTime.slice(0, 5)} ~ {detail.endTime.slice(0, 5)}</div>
                                 </div>
                             </div>
 
@@ -118,7 +118,7 @@ export default function ReservationDetailPage() {
 
                     {/* 신청자 정보 */}
                     <section>
-                        <h3 className="font-bold text-[#191F28] mb-3">신청자 정보</h3>
+                        <h3 className="font-bold text-[#191F28] mb-3">예약자 정보</h3>
                         <div className="bg-[#F9FAFB] rounded-xl p-5 space-y-3 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-[#8B95A1]">이름</span>

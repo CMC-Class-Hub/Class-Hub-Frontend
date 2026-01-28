@@ -47,7 +47,7 @@ export default function CheckReservationPage() {
                 {/* 상단 네비게이션 */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center">
                     <button onClick={() => router.back()} className="text-2xl text-[#191F28] mr-2">←</button>
-                    <span className="font-bold text-[#191F28] text-sm">신청 내역 조회</span>
+                    <span className="font-bold text-[#191F28] text-sm">예약 내역 조회</span>
                 </div>
 
                 <div className="p-5 space-y-6">
@@ -108,7 +108,7 @@ export default function CheckReservationPage() {
                                                 {res.date} · {res.startTime.slice(0, 5)}
                                             </div>
                                             <div className="mt-2 text-xs text-blue-600 font-bold bg-blue-50 inline-block px-2 py-1 rounded">
-                                                신청완료
+                                                예약완료
                                             </div>
                                         </button>
                                     </li>

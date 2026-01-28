@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { classApi, reservationApi, ClassDetailResponse } from '@/lib/api-config';
 
 export default function ClassEnrollmentPage() {
-    const { shareCode } = useParams();
+    const { classCode } = useParams();
     const router = useRouter();
 
     // 데이터 상태
@@ -26,8 +26,8 @@ export default function ClassEnrollmentPage() {
 
     // 1. 클래스 정보 불러오기
     useEffect(() => {
-        if (!shareCode) return;
-        classApi.getByShareCode(shareCode as string)
+        if (!classCode) return;
+        classApi.getByClassCode(classCode as string)
             .then((data) => {
                 setClassDetail(data);
                 setLoading(false);
@@ -37,7 +37,7 @@ export default function ClassEnrollmentPage() {
                 setError(true);
                 setLoading(false);
             });
-    }, [shareCode]);
+    }, [classCode]);
 
     // 2. 예약 신청하기
     const handleReserve = async () => {
@@ -83,7 +83,7 @@ export default function ClassEnrollmentPage() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
                     <span className="text-3xl">🎉</span>
                 </div>
-                <h2 className="text-2xl font-bold text-[#191F28] mb-2">신청 완료!</h2>
+                <h2 className="text-2xl font-bold text-[#191F28] mb-2">예약 완료!</h2>
                 <p className="text-[#8B95A1] text-center mb-8 leading-relaxed">
                     예약이 성공적으로 접수되었습니다.
                 </p>
@@ -103,7 +103,7 @@ export default function ClassEnrollmentPage() {
                     onClick={() => router.push(`/reservations/${completedReservationId}`)}
                     className="w-full py-3.5 bg-[#3182F6] text-white rounded-xl font-bold text-base hover:bg-[#1B64DA] transition-colors"
                 >
-                    신청 내역 확인
+                    예약 내역 확인
                 </button>
             </div>
         );
@@ -124,7 +124,7 @@ export default function ClassEnrollmentPage() {
                         href="/reservations"
                         className="absolute right-4 text-xs font-bold text-[#8B95A1] bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 hover:bg-gray-100 hover:text-[#333D4B] transition-colors"
                     >
-                        신청내역
+                        예약내역
                     </Link>
                 </div>
 
@@ -207,7 +207,7 @@ export default function ClassEnrollmentPage() {
                                     </p>
                                 </div>
 
-                                <h3 className="font-bold text-[#191F28] mb-3 text-base">📝 신청자 정보</h3>
+                                <h3 className="font-bold text-[#191F28] mb-3 text-base">📝 예약자 정보</h3>
                                 <div className="space-y-3">
                                     <div>
                                         <label className="block text-xs font-bold text-[#8B95A1] mb-1">이름</label>
@@ -250,7 +250,7 @@ export default function ClassEnrollmentPage() {
                             className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${!selectedSessionId ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
                                 }`}
                         >
-                            신청하기
+                            예약하기
                         </button>
                     ) : (
                         <button
@@ -259,7 +259,7 @@ export default function ClassEnrollmentPage() {
                             className={`w-full py-3.5 rounded-xl font-bold text-base transition-all active:scale-[0.98] ${(!applicantName || !phoneNumber) ? 'bg-[#E5E8EB] text-[#B0B8C1] cursor-not-allowed' : 'bg-[#3182F6] text-white hover:bg-[#1B64DA] shadow-lg shadow-blue-100'
                                 }`}
                         >
-                            신청하기
+                            예약하기
                         </button>
                     )}
                 </div>

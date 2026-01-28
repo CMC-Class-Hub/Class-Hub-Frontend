@@ -63,7 +63,7 @@ export const mockReservationList: ReservationItem[] = [
     date: '2025-02-15',
     startTime: '14:00:00',
     endTime: '16:00:00',
-    applicantName: '홍길동',
+    applicantName: '김철수',
   },
 ];
 
@@ -77,8 +77,8 @@ export const mockReservationDetails: Record<number, ReservationDetail> = {
     date: '2025-02-15',
     startTime: '14:00:00',
     endTime: '16:00:00',
-    applicantName: '홍길동',
-    phoneNumber: '010-9876-5432',
+    applicantName: '김철수',
+    phoneNumber: '010-1234-5678',
     capacity: 8,
     currentNum: 3,
     sessionStatus: 'RECRUITING',

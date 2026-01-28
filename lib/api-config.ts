@@ -83,13 +83,13 @@ const saveMockData = () => {
 
 // --- API 함수 ---
 export const classApi = {
-  getByShareCode: async (shareCode: string): Promise<ClassDetailResponse> => {
+  getByClassCode: async (classCode: string): Promise<ClassDetailResponse> => {
     if (USE_MOCK) {
-      const mockClass = mockClasses[shareCode];
+      const mockClass = mockClasses[classCode];
       if (!mockClass) throw new Error('클래스를 찾을 수 없습니다.');
       return mockClass;
     }
-    const res = await fetch(`${API_URL}/api/classes/shared/${shareCode}`);
+    const res = await fetch(`${API_URL}/api/classes/shared/${classCode}`);
     if (!res.ok) throw new Error('클래스를 찾을 수 없습니다.');
     return res.json();
   },
