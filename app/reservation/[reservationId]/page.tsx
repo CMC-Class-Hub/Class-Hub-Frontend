@@ -2,21 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-
-interface ReservationDetail {
-    reservationId: number;
-    classTitle: string;
-    classImageUrl?: string; // [추가] 이미지 URL (있을 수도 없을 수도 있음)
-    classLocation: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-    applicantName: string;
-    phoneNumber: string;
-    capacity: number;
-    currentNum: number;
-    sessionStatus: string;
-}
+import { reservationApi, ReservationDetail } from '@/lib/api-config';
 
 export default function ReservationDetailPage() {
     const { reservationId } = useParams();
@@ -25,11 +11,8 @@ export default function ReservationDetailPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/reservations/${reservationId}`)
-            .then(res => {
-                if (!res.ok) throw new Error('예약 정보를 찾을 수 없습니다.');
-                return res.json();
-            })
+        if (!reservationId) return;
+        reservationApi.getById(reservationId as string)
             .then(data => {
                 setDetail(data);
                 setLoading(false);
@@ -44,18 +27,11 @@ export default function ReservationDetailPage() {
         if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return;
 
         try {
-            const res = await fetch(`http://localhost:8080/api/reservations/${reservationId}`, {
-                method: 'DELETE'
-            });
-
-            if (res.ok) {
-                alert('예약이 취소되었습니다.');
-                router.push('/');
-            } else {
-                alert('취소에 실패했습니다.');
-            }
+            await reservationApi.cancel(reservationId as string);
+            alert('예약이 취소되었습니다.');
+            router.push('/');
         } catch (e) {
-            alert('서버 오류가 발생했습니다.');
+            alert(e instanceof Error ? e.message : '서버 오류가 발생했습니다.');
         }
     };
 

@@ -2,15 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-interface ReservationItem {
-    reservationId: number;
-    classTitle: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-    applicantName: string;
-}
+import { reservationApi, ReservationItem } from '@/lib/api-config';
 
 export default function CheckReservationPage() {
     const router = useRouter();
@@ -39,14 +31,8 @@ export default function CheckReservationPage() {
 
         setLoading(true);
         try {
-            // [수정] formattedPhone 사용
-            const res = await fetch(`http://localhost:8080/api/reservations/search?name=${name}&phone=${formattedPhone}`);
-            if (res.ok) {
-                const data = await res.json();
-                setReservations(data);
-            } else {
-                setReservations([]);
-            }
+            const data = await reservationApi.search(name, formattedPhone);
+            setReservations(data);
         } catch (error) {
             alert('조회 중 오류가 발생했습니다.');
         } finally {

@@ -3,32 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-// --- 타입 정의 ---
-interface SessionResponse {
-    sessionId: number;
-    date: string;
-    startTime: string;
-    endTime: string;
-    capacity: number;
-    currentNum: number;
-    status: 'RECRUITING' | 'FULL';
-}
-
-interface ClassDetailResponse {
-    id: number;
-    title: string;
-    imageUrl?: string; // [추가] 이미지 URL
-    description: string;
-    location: string;
-    locationDescription?: string;
-    price: number;
-    material?: string;
-    parkingInfo?: string;
-    guidelines?: string;
-    policy?: string;
-    sessions: SessionResponse[];
-}
+import { classApi, reservationApi, ClassDetailResponse } from '@/lib/api-config';
 
 export default function ClassEnrollmentPage() {
     const { shareCode } = useParams();
@@ -52,11 +27,7 @@ export default function ClassEnrollmentPage() {
     // 1. 클래스 정보 불러오기
     useEffect(() => {
         if (!shareCode) return;
-        fetch(`http://localhost:8080/api/classes/shared/${shareCode}`)
-            .then((res) => {
-                if (!res.ok) throw new Error('클래스를 찾을 수 없습니다.');
-                return res.json();
-            })
+        classApi.getByShareCode(shareCode as string)
             .then((data) => {
                 setClassDetail(data);
                 setLoading(false);
@@ -85,27 +56,16 @@ export default function ClassEnrollmentPage() {
         ).replace("--", "-");
 
         try {
-            const res = await fetch(`http://localhost:8080/api/reservations?onedayClassId=${classDetail.id}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sessionId: selectedSessionId,
-                    applicantName,
-                    phoneNumber: formattedPhone
-                }),
+            const reservationId = await reservationApi.create(classDetail.id, {
+                sessionId: selectedSessionId,
+                applicantName,
+                phoneNumber: formattedPhone
             });
-
-            if (res.ok) {
-                const reservationId = await res.json();
-                setCompletedReservationId(reservationId);
-                setStep('COMPLETED');
-                window.scrollTo(0, 0);
-            } else {
-                const errorText = await res.text();
-                setErrorMessage(errorText);
-            }
+            setCompletedReservationId(reservationId);
+            setStep('COMPLETED');
+            window.scrollTo(0, 0);
         } catch (e) {
-            setErrorMessage('서버 연결에 실패했습니다.');
+            setErrorMessage(e instanceof Error ? e.message : '서버 연결에 실패했습니다.');
         }
     };
 
