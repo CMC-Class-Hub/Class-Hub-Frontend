@@ -1,7 +1,14 @@
-import { ClassDetailResponse, ReservationItem, ReservationDetail } from './api-config';
+// Demo 데이터 - mock 구현체 전용
+// 컴포넌트에서 직접 import 금지
+
+import {
+  ClassDetailResponse,
+  ReservationItem,
+  ReservationDetail,
+} from '../types';
 
 // 강사 정보 (참고용)
-export const mockInstructor = {
+export const demoInstructor = {
   id: 1,
   businessName: '취미 공작소',
   email: 'hobby@gmail.com',
@@ -10,12 +17,14 @@ export const mockInstructor = {
 };
 
 // 클래스 데이터
-export const mockClasses: Record<string, ClassDetailResponse> = {
+export const demoClasses: Record<string, ClassDetailResponse> = {
   test: {
     id: 1,
     title: '감성 가득 달항아리 만들기',
-    imageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
-    description: '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
+    description:
+      '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.',
     location: '서울 성동구 연무장길 45',
     locationDescription: '성수역 근처 카페 거리 내 위치',
     price: 60000,
@@ -56,7 +65,7 @@ export const mockClasses: Record<string, ClassDetailResponse> = {
 };
 
 // 예약 목록 (검색 결과용)
-export const mockReservationList: ReservationItem[] = [
+export const demoReservationList: ReservationItem[] = [
   {
     reservationId: 1,
     classTitle: '감성 가득 달항아리 만들기',
@@ -67,12 +76,13 @@ export const mockReservationList: ReservationItem[] = [
   },
 ];
 
-// 예약 상세
-export const mockReservationDetails: Record<number, ReservationDetail> = {
+// 예약 상세 (mutable - localStorage와 동기화됨)
+export const demoReservationDetails: Record<number, ReservationDetail> = {
   1: {
     reservationId: 1,
     classTitle: '감성 가득 달항아리 만들기',
-    classImageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
+    classImageUrl:
+      'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
     classLocation: '서울 성동구 연무장길 45',
     date: '2025-02-15',
     startTime: '14:00:00',

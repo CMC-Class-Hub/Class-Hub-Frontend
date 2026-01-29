@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { reservationApi, ReservationItem } from '@/lib/api-config';
+import { reservationApi, ReservationItem } from '@/lib/api';
 
 export default function CheckReservationPage() {
     const router = useRouter();

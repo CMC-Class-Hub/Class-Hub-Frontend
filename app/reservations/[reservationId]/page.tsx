@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { reservationApi, ReservationDetail } from '@/lib/api-config';
+import { reservationApi, ReservationDetail } from '@/lib/api';
 
 export default function ReservationDetailPage() {
     const { reservationId } = useParams();
