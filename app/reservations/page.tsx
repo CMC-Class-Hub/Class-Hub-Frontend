@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { reservationApi, ReservationItem } from '@/lib/api';
 
+// Components
+import { Header } from '@/components/ui/Header';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { ReservationResult } from '@/components/features/ReservationResult';
+
 export default function CheckReservationPage() {
     const router = useRouter();
     const [name, setName] = useState('');
@@ -44,41 +50,27 @@ export default function CheckReservationPage() {
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
             <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative">
 
-                {/* 상단 네비게이션 */}
-                <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center">
-                    <button onClick={() => router.back()} className="text-2xl text-[#191F28] mr-2">←</button>
-                    <span className="font-bold text-[#191F28] text-sm">예약 내역 조회</span>
-                </div>
+                <Header title="예약 내역 조회" showBack />
 
                 <div className="p-5 space-y-6">
                     {/* 검색 폼 */}
                     <form onSubmit={handleSearch} className="bg-white space-y-4">
-                        <div>
-                            <label className="block text-xs font-bold text-[#8B95A1] mb-1">이름</label>
-                            <input
-                                type="text"
-                                placeholder="예: 김철수"
-                                className="w-full p-3.5 bg-[#F9FAFB] rounded-xl text-[#191F28] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#3182F6]"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-[#8B95A1] mb-1">연락처</label>
-                            <input
-                                type="tel"
-                                placeholder="예: 01012345678" // 숫자만 입력해도 됨을 암시
-                                className="w-full p-3.5 bg-[#F9FAFB] rounded-xl text-[#191F28] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#3182F6]"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full py-3.5 bg-[#3182F6] text-white rounded-xl font-bold text-sm hover:bg-[#1B64DA] transition-colors"
-                        >
+                        <Input
+                            label="이름"
+                            placeholder="예: 김철수"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <Input
+                            label="연락처"
+                            type="tel"
+                            placeholder="예: 01012345678"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <Button type="submit" fullWidth>
                             조회하기
-                        </button>
+                        </Button>
                     </form>
 
                     <div className="h-px bg-gray-100"></div>
@@ -99,18 +91,10 @@ export default function CheckReservationPage() {
                             <ul className="space-y-3">
                                 {reservations.map((res) => (
                                     <li key={res.reservationId}>
-                                        <button
+                                        <ReservationResult
+                                            reservation={res}
                                             onClick={() => router.push(`/reservations/${res.reservationId}`)}
-                                            className="w-full bg-white border border-gray-200 p-4 rounded-xl shadow-sm text-left hover:border-[#3182F6] transition-colors"
-                                        >
-                                            <div className="font-bold text-[#333D4B] mb-1">{res.classTitle}</div>
-                                            <div className="text-sm text-[#8B95A1]">
-                                                {res.date} · {res.startTime.slice(0, 5)}
-                                            </div>
-                                            <div className="mt-2 text-xs text-blue-600 font-bold bg-blue-50 inline-block px-2 py-1 rounded">
-                                                예약완료
-                                            </div>
-                                        </button>
+                                        />
                                     </li>
                                 ))}
                             </ul>

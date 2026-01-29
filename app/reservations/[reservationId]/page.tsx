@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { reservationApi, ReservationDetail } from '@/lib/api';
 
+// Components
+import { Header } from '@/components/ui/Header';
+import { Button } from '@/components/ui/Button';
+
 export default function ReservationDetailPage() {
     const { reservationId } = useParams();
     const router = useRouter();
@@ -42,11 +46,7 @@ export default function ReservationDetailPage() {
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
             <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative">
 
-                {/* 상단 네비게이션 */}
-                <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-3 flex items-center z-10">
-                    <button onClick={() => router.back()} className="text-2xl text-[#191F28] mr-2">←</button>
-                    <span className="font-bold text-[#191F28] text-sm">예약 내역 상세</span>
-                </div>
+                <Header title="예약 내역 상세" showBack />
 
                 <div className="p-6 space-y-6">
                     {/* 상단 상태 텍스트 */}
@@ -134,19 +134,20 @@ export default function ReservationDetailPage() {
 
                 {/* 하단 버튼 영역 */}
                 <div className="p-6 pt-0 space-y-3">
-                    <button
+                    <Button
                         onClick={() => router.push('/')}
-                        className="w-full py-3 bg-[#3182F6] text-white rounded-xl font-bold text-sm hover:bg-[#1B64DA]"
+                        fullWidth
                     >
                         홈으로 돌아가기
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         onClick={handleCancel}
-                        className="w-full py-3 bg-white border border-[#E5E8EB] text-red-500 rounded-xl font-bold text-sm hover:bg-red-50"
+                        fullWidth
+                        variant="danger"
                     >
                         예약 취소하기
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
