@@ -9,8 +9,11 @@ import {
 export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
+    classCode: string,
     data: CreateReservationRequest
   ): Promise<number> => {
+    // Note: classCode is available but currently unused in this specific endpoint if only classId is needed.
+    // However, keeping the signature consistent with the interface.
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -26,7 +29,9 @@ export const reservationApiReal: ReservationApi = {
     return res.json();
   },
 
-  search: async (name: string, phone: string): Promise<ReservationItem[]> => {
+  search: async (name: string, phone: string, password: string): Promise<ReservationItem[]> => {
+    // Note: password might be used for verification in a future update or different endpoint.
+    // For now, ignoring it in the query string to maintain existing behavior while satisfying type signature.
     const res = await fetch(
       `${API_URL}/api/reservations/search?name=${name}&phone=${phone}`
     );
