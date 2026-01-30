@@ -4,8 +4,10 @@ import { Input } from '../ui/Input';
 interface ReservationFormProps {
     applicantName: string;
     phoneNumber: string;
+    password: string;
     onNameChange: (value: string) => void;
     onPhoneChange: (value: string) => void;
+    onPasswordChange: (value: string) => void;
     selectedDate: string;
     selectedTime: string;
 }
@@ -13,8 +15,10 @@ interface ReservationFormProps {
 export const ReservationForm: React.FC<ReservationFormProps> = ({
     applicantName,
     phoneNumber,
+    password,
     onNameChange,
     onPhoneChange,
+    onPasswordChange,
     selectedDate,
     selectedTime,
 }) => {
@@ -42,6 +46,17 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     value={phoneNumber}
                     onChange={(e) => onPhoneChange(e.target.value)}
                 />
+                <Input
+                    label="비밀번호"
+                    type="password"
+                    placeholder="숫자 4자리 (예: 1234)"
+                    value={password}
+                    onChange={(e) => onPasswordChange(e.target.value)}
+                    maxLength={4}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                    * 예약 취소 시 필요한 4자리 비밀번호를 입력해주세요.
+                </p>
             </div>
         </section>
     );

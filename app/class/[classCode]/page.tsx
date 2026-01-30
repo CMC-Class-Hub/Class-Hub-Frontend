@@ -25,6 +25,7 @@ export default function ClassEnrollmentPage() {
     const [selectedSessionId, setSelectedSessionId] = useState<number | null>(null);
     const [applicantName, setApplicantName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
     const [completedReservationId, setCompletedReservationId] = useState<number | null>(null);
 
     // 에러 메시지 상태
@@ -47,7 +48,7 @@ export default function ClassEnrollmentPage() {
 
     // 2. 예약 신청하기
     const handleReserve = async () => {
-        if (!selectedSessionId || !applicantName || !phoneNumber || !classDetail) return;
+        if (!selectedSessionId || !applicantName || !phoneNumber || !password || !classDetail) return;
 
         setErrorMessage('');
 
@@ -56,6 +57,11 @@ export default function ClassEnrollmentPage() {
             setErrorMessage("올바른 전화번호를 입력해주세요.");
             return;
         }
+        if (password.length !== 4) {
+            setErrorMessage("비밀번호는 4자리여야 합니다.");
+            return;
+        }
+
         const formattedPhone = cleanNumber.replace(
             /(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,
             "$1-$2-$3"
@@ -65,7 +71,8 @@ export default function ClassEnrollmentPage() {
             const reservationId = await reservationApi.create(classDetail.id, {
                 sessionId: selectedSessionId,
                 applicantName,
-                phoneNumber: formattedPhone
+                phoneNumber: formattedPhone,
+                password
             });
             setCompletedReservationId(reservationId);
             setStep('COMPLETED');
@@ -154,8 +161,10 @@ export default function ClassEnrollmentPage() {
                             <ReservationForm
                                 applicantName={applicantName}
                                 phoneNumber={phoneNumber}
+                                password={password}
                                 onNameChange={(val) => { setApplicantName(val); setErrorMessage(''); }}
                                 onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
+                                onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
                                 selectedDate={getSelectedSession()?.date || ''}
                                 selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
                             />
@@ -183,9 +192,9 @@ export default function ClassEnrollmentPage() {
                     ) : (
                         <Button
                             onClick={handleReserve}
-                            disabled={!applicantName || !phoneNumber}
+                            disabled={!applicantName || !phoneNumber || !password}
                             fullWidth
-                            variant={(!applicantName || !phoneNumber) ? "secondary" : "primary"}
+                            variant={(!applicantName || !phoneNumber || !password) ? "secondary" : "primary"}
                         >
                             예약하기
                         </Button>

@@ -37,6 +37,7 @@ export const reservationApiMock: ReservationApi = {
       capacity: session.capacity,
       currentNum: session.currentNum + 1,
       sessionStatus: session.status,
+      password: data.password,
     };
 
     saveReservations(demoReservationDetails);

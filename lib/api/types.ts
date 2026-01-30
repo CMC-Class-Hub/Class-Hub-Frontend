@@ -47,12 +47,14 @@ export interface ReservationDetail {
   capacity: number;
   currentNum: number;
   sessionStatus: string;
+  password?: string;
 }
 
 export interface CreateReservationRequest {
   sessionId: number;
   applicantName: string;
   phoneNumber: string;
+  password?: string; // 임시 비밀번호 (선택적)
 }
 
 // API 인터페이스 정의
