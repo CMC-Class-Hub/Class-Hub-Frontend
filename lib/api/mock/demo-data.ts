@@ -21,10 +21,14 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
   test: {
     id: 1,
     title: '감성 가득 달항아리 만들기',
-    imageUrl:
-      'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop', // 메인 이미지
+      'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?q=80&w=800&auto=format&fit=crop', // 만드는 과정
+      'https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?q=80&w=800&auto=format&fit=crop', // 도자기 완성품
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop'  // 도자기 작업
+    ],
     description:
-      '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.',
+      '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.\n\n📌 클래스 과정\n1. 흙 반죽하기 - 점토의 특성을 이해하고 반죽해요 (20분)\n2. 형태 잡기 - 물레를 사용해 달항아리 형태를 만들어요 (40분)\n3. 다듬기 - 표면을 매끄럽게 정리하고 나만의 무늬를 새겨요 (30분)\n4. 마무리 - 건조 및 유약 설명, 완성작 수령 안내 (10분)',
     location: '서울 성동구 연무장길 45',
     locationDescription: '성수역 근처 카페 거리 내 위치',
     price: 60000,

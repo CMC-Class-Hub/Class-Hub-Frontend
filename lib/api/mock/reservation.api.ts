@@ -27,7 +27,7 @@ export const reservationApiMock: ReservationApi = {
     demoReservationDetails[newId] = {
       reservationId: newId,
       classTitle: classItem.title,
-      classImageUrl: classItem.imageUrl,
+      classImageUrl: classItem.images[0],
       classLocation: classItem.location,
       date: session.date,
       startTime: session.startTime,

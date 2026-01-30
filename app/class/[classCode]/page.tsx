@@ -124,7 +124,7 @@ export default function ClassEnrollmentPage() {
 
     return (
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
-            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-24">
+            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-32">
 
                 {/* 상단 네비게이션 */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 border-b border-gray-100 px-4 py-3 flex items-center relative">
@@ -180,25 +180,36 @@ export default function ClassEnrollmentPage() {
                         </div>
                     )}
 
-                    {step === 'SELECTION' ? (
-                        <Button
-                            onClick={() => setStep('INPUT')}
-                            disabled={!selectedSessionId}
-                            fullWidth
-                            variant={!selectedSessionId ? "secondary" : "primary"}
-                        >
-                            예약하기
-                        </Button>
-                    ) : (
-                        <Button
-                            onClick={handleReserve}
-                            disabled={!applicantName || !phoneNumber || !password}
-                            fullWidth
-                            variant={(!applicantName || !phoneNumber || !password) ? "secondary" : "primary"}
-                        >
-                            예약하기
-                        </Button>
-                    )}
+                    {/* 가격 및 현장결제 안내 */}
+                    <div className="flex items-center justify-between mb-3">
+                        <div>
+                            <p className="text-[#191F28] font-bold text-xl">
+                                {classDetail.price.toLocaleString()}원
+                            </p>
+                            <p className="text-[#8B95A1] text-xs mt-0.5">
+                                현장에서 결제해 주세요
+                            </p>
+                        </div>
+                        {step === 'SELECTION' ? (
+                            <Button
+                                onClick={() => setStep('INPUT')}
+                                disabled={!selectedSessionId}
+                                variant={!selectedSessionId ? "secondary" : "primary"}
+                                className="px-8"
+                            >
+                                예약하기
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={handleReserve}
+                                disabled={!applicantName || !phoneNumber || !password}
+                                variant={(!applicantName || !phoneNumber || !password) ? "secondary" : "primary"}
+                                className="px-8"
+                            >
+                                예약 완료
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

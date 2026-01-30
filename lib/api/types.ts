@@ -13,7 +13,7 @@ export interface SessionResponse {
 export interface ClassDetailResponse {
   id: number;
   title: string;
-  imageUrl?: string;
+  images: string[];   // 여러 장의 이미지 URL
   description: string;
   location: string;
   locationDescription?: string;
