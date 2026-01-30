@@ -40,7 +40,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
         <div className={`space-y-6 ${className}`}>
             {/* Image Carousel */}
             {classDetail.images && classDetail.images.length > 0 && (
-                <div className="relative w-full h-80 bg-gray-200 group">
+                <div className="relative w-full h-64 bg-gray-200 group">
                     <div
                         ref={carouselRef}
                         className="w-full h-full overflow-x-auto flex snap-x snap-mandatory scrollbar-hide"
@@ -81,7 +81,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
             )}
 
             {showHeader && (
-                <div className="px-5">
+                <div className="px-6">
                     <span className="inline-block px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded mb-2">
                         원데이 클래스
                     </span>
@@ -107,12 +107,12 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
                     </div>
 
                     {/* 주소 아래 구분선 */}
-                    <div className="border-t border-gray-200 mt-4 mb-6" />
+                    <div className="h-px bg-gray-100 mt-4 mb-6" />
                 </div>
             )}
 
             {/* Detailed Info Sections */}
-            <div className="px-5 pb-8 space-y-8">
+            <div className="px-6 pb-8 space-y-8">
                 {/* Description */}
                 <div>
                     <h3 className="font-bold text-[#191F28] text-base mb-3">클래스 소개</h3>
@@ -123,39 +123,39 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
 
                 <div className="bg-[#F9FAFB] rounded-xl p-4 text-sm text-[#4E5968] space-y-3">
                     {(classDetail.material ||
-                      classDetail.guidelines ||
-                      classDetail.parkingInfo ||
-                      classDetail.policy) && (
-                      <div className="space-y-2 text-xs">
-                        {classDetail.material && (
-                          <div className="flex gap-2">
-                            <span className="font-bold text-[#8B95A1] shrink-0">준비물</span>
-                            <span className="whitespace-pre-wrap">{classDetail.material}</span>
-                          </div>
-                        )}
+                        classDetail.guidelines ||
+                        classDetail.parkingInfo ||
+                        classDetail.policy) && (
+                            <div className="space-y-2 text-xs">
+                                {classDetail.material && (
+                                    <div className="flex gap-2">
+                                        <span className="font-bold text-[#8B95A1] shrink-0">준비물</span>
+                                        <span className="whitespace-pre-wrap">{classDetail.material}</span>
+                                    </div>
+                                )}
 
-                        {classDetail.guidelines && (
-                          <div className="flex gap-2">
-                            <span className="font-bold text-[#8B95A1] shrink-0">안내사항</span>
-                            <span className="whitespace-pre-wrap">{classDetail.guidelines}</span>
-                          </div>
-                        )}
+                                {classDetail.guidelines && (
+                                    <div className="flex gap-2">
+                                        <span className="font-bold text-[#8B95A1] shrink-0">안내사항</span>
+                                        <span className="whitespace-pre-wrap">{classDetail.guidelines}</span>
+                                    </div>
+                                )}
 
-                        {classDetail.parkingInfo && (
-                          <div className="flex gap-2">
-                            <span className="font-bold text-[#8B95A1] shrink-0">주차</span>
-                            <span className="whitespace-pre-wrap">{classDetail.parkingInfo}</span>
-                          </div>
-                        )}
+                                {classDetail.parkingInfo && (
+                                    <div className="flex gap-2">
+                                        <span className="font-bold text-[#8B95A1] shrink-0">주차</span>
+                                        <span className="whitespace-pre-wrap">{classDetail.parkingInfo}</span>
+                                    </div>
+                                )}
 
-                        {classDetail.policy && (
-                          <div className="flex gap-2">
-                            <span className="font-bold text-[#8B95A1] shrink-0">취소/환불</span>
-                            <span className="whitespace-pre-wrap">{classDetail.policy}</span>
-                          </div>
+                                {classDetail.policy && (
+                                    <div className="flex gap-2">
+                                        <span className="font-bold text-[#8B95A1] shrink-0">취소/환불</span>
+                                        <span className="whitespace-pre-wrap">{classDetail.policy}</span>
+                                    </div>
+                                )}
+                            </div>
                         )}
-                      </div>
-                    )}
                 </div>
             </div>
         </div>
