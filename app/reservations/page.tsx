@@ -14,12 +14,13 @@ export default function CheckReservationPage() {
     const router = useRouter();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
     const [reservations, setReservations] = useState<ReservationItem[] | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name || !phone) return alert('이름과 전화번호를 입력해주세요.');
+        if (!name || !phone || !password) return alert('이름, 전화번호, 비밀번호를 모두 입력해주세요.');
 
         // [수정] 전화번호 포맷팅 로직 추가 (숫자만 입력해도 하이픈 붙여서 전송)
         const cleanNumber = phone.replace(/[^0-9]/g, '');
@@ -37,7 +38,7 @@ export default function CheckReservationPage() {
 
         setLoading(true);
         try {
-            const data = await reservationApi.search(name, formattedPhone);
+            const data = await reservationApi.search(name, formattedPhone, password);
             setReservations(data);
         } catch (error) {
             alert('조회 중 오류가 발생했습니다.');
@@ -67,6 +68,14 @@ export default function CheckReservationPage() {
                             placeholder="예: 01012345678"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <Input
+                            label="비밀번호"
+                            type="password"
+                            placeholder="예약 시 입력한 4자리 비밀번호"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            maxLength={4}
                         />
                         <Button type="submit" fullWidth>
                             조회하기

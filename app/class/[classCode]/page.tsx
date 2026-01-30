@@ -68,7 +68,7 @@ export default function ClassEnrollmentPage() {
         ).replace("--", "-");
 
         try {
-            const reservationId = await reservationApi.create(classDetail.id, {
+            const reservationId = await reservationApi.create(classDetail.id, classCode as string, {
                 sessionId: selectedSessionId,
                 applicantName,
                 phoneNumber: formattedPhone,
@@ -142,34 +142,34 @@ export default function ClassEnrollmentPage() {
                 </div>
 
                 <div className="p-0">
-                    <ClassInfoCard classDetail={classDetail} />
-
-                    <div className="h-px bg-gray-100 my-6 mx-5"></div>
-
-                    <div className="space-y-6">
-                        {/* Step 1: 일정 선택 */}
-                        {step === 'SELECTION' && (
+                    {/* Step 1: 클래스 정보 + 일정 선택 */}
+                    {step === 'SELECTION' && (
+                        <>
+                            <ClassInfoCard classDetail={classDetail} />
+                            <div className="h-px bg-gray-100 my-6 mx-5"></div>
                             <SessionSelector
                                 sessions={classDetail.sessions}
                                 selectedSessionId={selectedSessionId}
                                 onSelect={(id) => { setSelectedSessionId(id); setErrorMessage(''); }}
                             />
-                        )}
+                        </>
+                    )}
 
-                        {/* Step 2: 정보 입력 */}
-                        {step === 'INPUT' && (
-                            <ReservationForm
-                                applicantName={applicantName}
-                                phoneNumber={phoneNumber}
-                                password={password}
-                                onNameChange={(val) => { setApplicantName(val); setErrorMessage(''); }}
-                                onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
-                                onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
-                                selectedDate={getSelectedSession()?.date || ''}
-                                selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
-                            />
-                        )}
-                    </div>
+                    {/* Step 2: 정보 입력 */}
+                    {step === 'INPUT' && (
+                        <div className="pt-6">
+                        <ReservationForm
+                            applicantName={applicantName}
+                            phoneNumber={phoneNumber}
+                            password={password}
+                            onNameChange={(val) => { setApplicantName(val); setErrorMessage(''); }}
+                            onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
+                            onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
+                            selectedDate={getSelectedSession()?.date || ''}
+                            selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
+                        />
+                        </div>
+                    )}
                 </div>
 
                 {/* 하단 고정 버튼 */}

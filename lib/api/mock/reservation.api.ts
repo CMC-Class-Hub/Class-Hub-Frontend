@@ -10,6 +10,7 @@ import { loadReservations, saveReservations } from './storage';
 export const reservationApiMock: ReservationApi = {
   create: async (
     classId: number,
+    classCode: string,
     data: CreateReservationRequest
   ): Promise<number> => {
     loadReservations(demoReservationDetails);
@@ -27,6 +28,7 @@ export const reservationApiMock: ReservationApi = {
     demoReservationDetails[newId] = {
       reservationId: newId,
       classTitle: classItem.title,
+      classCode: classCode,
       classImageUrl: classItem.images[0],
       classLocation: classItem.location,
       date: session.date,
@@ -45,10 +47,10 @@ export const reservationApiMock: ReservationApi = {
     return newId;
   },
 
-  search: async (name: string, phone: string): Promise<ReservationItem[]> => {
+  search: async (name: string, phone: string, password: string): Promise<ReservationItem[]> => {
     loadReservations(demoReservationDetails);
     return Object.values(demoReservationDetails)
-      .filter((r) => r.applicantName === name && r.phoneNumber === phone)
+      .filter((r) => r.applicantName === name && r.phoneNumber === phone && r.password === password)
       .map((r) => ({
         reservationId: r.reservationId,
         classTitle: r.classTitle,

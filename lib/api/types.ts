@@ -37,6 +37,7 @@ export interface ReservationItem {
 export interface ReservationDetail {
   reservationId: number;
   classTitle: string;
+  classCode: string;
   classImageUrl?: string;
   classLocation: string;
   date: string;
@@ -63,8 +64,8 @@ export interface ClassApi {
 }
 
 export interface ReservationApi {
-  create: (classId: number, data: CreateReservationRequest) => Promise<number>;
-  search: (name: string, phone: string) => Promise<ReservationItem[]>;
+  create: (classId: number, classCode: string, data: CreateReservationRequest) => Promise<number>;
+  search: (name: string, phone: string, password: string) => Promise<ReservationItem[]>;
   getById: (reservationId: number | string) => Promise<ReservationDetail>;
   cancel: (reservationId: number | string) => Promise<void>;
 }

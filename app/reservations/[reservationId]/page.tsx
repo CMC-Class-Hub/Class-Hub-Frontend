@@ -135,10 +135,10 @@ export default function ReservationDetailPage() {
                 {/* 하단 버튼 영역 */}
                 <div className="p-6 pt-0 space-y-3">
                     <Button
-                        onClick={() => router.push('/')}
+                        onClick={() => router.push(`/class/${detail.classCode}`)}
                         fullWidth
                     >
-                        홈으로 돌아가기
+                        클래스로 돌아가기
                     </Button>
 
                     <Button
