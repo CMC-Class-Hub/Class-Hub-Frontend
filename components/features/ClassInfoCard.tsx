@@ -112,7 +112,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
             )}
 
             {/* Detailed Info Sections */}
-            <div className="px-6 pb-8 space-y-8">
+            <div className="px-6 pb-2 space-y-8">
                 {/* Description */}
                 <div>
                     <h3 className="font-bold text-[#191F28] text-base mb-3">클래스 소개</h3>

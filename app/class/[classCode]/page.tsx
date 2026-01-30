@@ -124,7 +124,7 @@ export default function ClassEnrollmentPage() {
 
     return (
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
-            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-32">
+            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-28">
 
                 {/* 상단 네비게이션 */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 border-b border-gray-100 px-4 py-3 flex items-center relative">
@@ -158,16 +158,16 @@ export default function ClassEnrollmentPage() {
                     {/* Step 2: 정보 입력 */}
                     {step === 'INPUT' && (
                         <div className="pt-6">
-                        <ReservationForm
-                            applicantName={applicantName}
-                            phoneNumber={phoneNumber}
-                            password={password}
-                            onNameChange={(val) => { setApplicantName(val); setErrorMessage(''); }}
-                            onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
-                            onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
-                            selectedDate={getSelectedSession()?.date || ''}
-                            selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
-                        />
+                            <ReservationForm
+                                applicantName={applicantName}
+                                phoneNumber={phoneNumber}
+                                password={password}
+                                onNameChange={(val) => { setApplicantName(val); setErrorMessage(''); }}
+                                onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
+                                onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
+                                selectedDate={getSelectedSession()?.date || ''}
+                                selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
+                            />
                         </div>
                     )}
                 </div>
@@ -181,7 +181,7 @@ export default function ClassEnrollmentPage() {
                     )}
 
                     {/* 가격 및 현장결제 안내 */}
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[#191F28] font-bold text-xl">
                                 {classDetail.price.toLocaleString()}원
