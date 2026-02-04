@@ -4,8 +4,10 @@ import { Input } from '../ui/Input';
 interface ReservationFormProps {
     applicantName: string;
     phoneNumber: string;
+    password: string;
     onNameChange: (value: string) => void;
     onPhoneChange: (value: string) => void;
+    onPasswordChange: (value: string) => void;
     selectedDate: string;
     selectedTime: string;
 }
@@ -13,8 +15,10 @@ interface ReservationFormProps {
 export const ReservationForm: React.FC<ReservationFormProps> = ({
     applicantName,
     phoneNumber,
+    password,
     onNameChange,
     onPhoneChange,
+    onPasswordChange,
     selectedDate,
     selectedTime,
 }) => {
@@ -41,6 +45,13 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     placeholder="01012345678"
                     value={phoneNumber}
                     onChange={(e) => onPhoneChange(e.target.value)}
+                />
+                <Input
+                    label="비밀번호"
+                    type="password"
+                    placeholder="비밀번호 (조회용)"
+                    value={password}
+                    onChange={(e) => onPasswordChange(e.target.value)}
                 />
             </div>
         </section>

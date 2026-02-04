@@ -1,39 +1,52 @@
 // API 타입 정의
 
 export interface SessionResponse {
-  sessionId: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  capacity: number;
-  currentNum: number;
-  status: 'RECRUITING' | 'FULL';
+  id: number;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  currentNum?: number;
+  capacity?: number;
+  status?: string;
 }
 
 export interface ClassDetailResponse {
   id: number;
-  title: string;
-  imageUrl?: string;
-  description: string;
-  location: string;
+  classCode?: string;
+  name?: string;
+  imageUrls?: string[];
+  description?: string;
+  location?: string;
   locationDescription?: string;
-  price: number;
-  material?: string;
+  price?: number;
+  preparation?: string;
   parkingInfo?: string;
   guidelines?: string;
   policy?: string;
-  sessions: SessionResponse[];
+  instructorId?: number;
+  sessions?: SessionResponse[];
 }
 
-export interface ReservationItem {
-  reservationId: number;
-  classTitle: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  applicantName: string;
+// Student/Member 타입
+export interface MemberResponse {
+  id: number;
+  name: string;
+  phone: string;
+  createdAt: string;
 }
 
+export interface CreateMemberRequest {
+  name: string;
+  phone: string;
+  password?: string;
+}
+
+export interface UpdateMemberRequest {
+  name?: string;
+  phone?: string;
+}
+
+// Reservation 타입
 export interface ReservationDetail {
   reservationId: number;
   classTitle: string;
@@ -49,20 +62,44 @@ export interface ReservationDetail {
   sessionStatus: string;
 }
 
+// search 응답도 ReservationDetail과 동일함
+export type ReservationItem = ReservationDetail;
+
 export interface CreateReservationRequest {
   sessionId: number;
   applicantName: string;
   phoneNumber: string;
+  password?: string;
+}
+
+// 강사용 특정 세션 예약 정보
+export interface SessionReservationInfo {
+  reservationId: number;
+  studentId: number;
+  applicantName: string;
+  phoneNumber: string;
+  appliedAt: string;
+  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 }
 
 // API 인터페이스 정의
 export interface ClassApi {
   getByClassCode: (classCode: string) => Promise<ClassDetailResponse>;
+  getSessionsByClassId: (classId: number) => Promise<SessionResponse[]>;
+  getSessionById: (sessionId: number) => Promise<SessionResponse>;
 }
 
 export interface ReservationApi {
   create: (classId: number, data: CreateReservationRequest) => Promise<number>;
-  search: (name: string, phone: string) => Promise<ReservationItem[]>;
+  search: (name: string, phone: string, password: string) => Promise<ReservationItem[]>;
   getById: (reservationId: number | string) => Promise<ReservationDetail>;
   cancel: (reservationId: number | string) => Promise<void>;
+  getBySessionId: (sessionId: number) => Promise<SessionReservationInfo[]>;
+}
+
+export interface MemberApi {
+  getAll: () => Promise<MemberResponse[]>;
+  getById: (id: number) => Promise<MemberResponse>;
+  create: (data: CreateMemberRequest) => Promise<void>;
+  update: (id: number, data: UpdateMemberRequest) => Promise<void>;
 }

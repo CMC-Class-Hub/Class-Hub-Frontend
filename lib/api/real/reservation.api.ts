@@ -2,8 +2,8 @@ import { API_URL } from '../api-config';
 import {
   ReservationApi,
   CreateReservationRequest,
-  ReservationItem,
   ReservationDetail,
+  SessionReservationInfo,
 } from '../types';
 
 export const reservationApiReal: ReservationApi = {
@@ -11,6 +11,7 @@ export const reservationApiReal: ReservationApi = {
     classId: number,
     data: CreateReservationRequest
   ): Promise<number> => {
+    console.log('create reservation', data);
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -26,9 +27,9 @@ export const reservationApiReal: ReservationApi = {
     return res.json();
   },
 
-  search: async (name: string, phone: string): Promise<ReservationItem[]> => {
+  search: async (name: string, phone: string, password: string): Promise<ReservationDetail[]> => {
     const res = await fetch(
-      `${API_URL}/api/reservations/search?name=${name}&phone=${phone}`
+      `${API_URL}/api/reservations/search?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&password=${encodeURIComponent(password)}`
     );
     if (!res.ok) return [];
     return res.json();
@@ -45,5 +46,11 @@ export const reservationApiReal: ReservationApi = {
       method: 'DELETE',
     });
     if (!res.ok) throw new Error('취소에 실패했습니다.');
+  },
+
+  getBySessionId: async (sessionId: number): Promise<SessionReservationInfo[]> => {
+    const res = await fetch(`${API_URL}/api/reservations/session/${sessionId}`);
+    if (!res.ok) throw new Error('세션별 예약 목록을 가져올 수 없습니다.');
+    return res.json();
   },
 };
