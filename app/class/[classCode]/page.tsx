@@ -68,7 +68,7 @@ export default function ClassEnrollmentPage() {
         ).replace("--", "-");
 
         try {
-            const reservationId = await reservationApi.create(classDetail.id, classCode as string, {
+            const reservationId = await reservationApi.create(classDetail.id, {
                 sessionId: selectedSessionId,
                 applicantName,
                 phoneNumber: formattedPhone,
