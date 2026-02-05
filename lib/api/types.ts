@@ -8,6 +8,7 @@ export interface SessionResponse {
   currentNum?: number;
   capacity?: number;
   status?: string;
+  price?: number;
 }
 
 export interface ClassDetailResponse {
@@ -18,7 +19,6 @@ export interface ClassDetailResponse {
   description?: string;
   location?: string;
   locationDescription?: string;
-  price?: number;
   preparation?: string;
   parkingInfo?: string;
   guidelines?: string;

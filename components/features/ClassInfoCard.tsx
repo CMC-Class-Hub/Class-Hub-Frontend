@@ -12,11 +12,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
     showHeader = true,
     className = ''
 }) => {
-    // 가격 포맷팅 함수
-    const formatPrice = (price?: number) => {
-        if (price === undefined) return '가격 정보 없음';
-        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-    };
+
 
     return (
         <div className={`space-y-0 ${className}`}>
@@ -35,15 +31,10 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
             <div className="px-5 pt-8 pb-4">
                 {showHeader && (
                     <div className="space-y-4">
-                        <div className="flex justify-between items-start">
+                        <div>
                             <span className="inline-block px-2.5 py-1 bg-[#E8F3FF] text-[#3182F6] text-[11px] font-bold rounded-md">
                                 원데이 클래스
                             </span>
-                            {classDetail.price !== undefined && (
-                                <span className="text-lg font-bold text-[#3182F6]">
-                                    {formatPrice(classDetail.price)}
-                                </span>
-                            )}
                         </div>
 
                         <h1 className="text-2xl font-bold text-[#191F28] leading-snug">

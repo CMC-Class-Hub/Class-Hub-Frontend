@@ -174,6 +174,7 @@ export default function ClassEnrollmentPage() {
                                 onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
                                 selectedDate={getSelectedSession()?.date || ''}
                                 selectedTime={getSelectedSession()?.startTime?.slice(0, 5) || ''}
+                                selectedPrice={getSelectedSession()?.price}
                             />
                         )}
                     </div>

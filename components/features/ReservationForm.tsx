@@ -10,6 +10,7 @@ interface ReservationFormProps {
     onPasswordChange: (value: string) => void;
     selectedDate: string;
     selectedTime: string;
+    selectedPrice?: number;
 }
 
 export const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -21,6 +22,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     onPasswordChange,
     selectedDate,
     selectedTime,
+    selectedPrice,
 }) => {
     return (
         <section className="px-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -29,6 +31,11 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 <p className="text-sm font-bold text-[#191F28]">
                     {selectedDate} {selectedTime}
                 </p>
+                {selectedPrice !== undefined && selectedPrice !== null && (
+                    <p className="text-sm font-bold text-[#3182F6] mt-1">
+                        {selectedPrice.toLocaleString()}원
+                    </p>
+                )}
             </div>
 
             <h3 className="font-bold text-[#191F28] mb-3 text-base">📝 예약자 정보</h3>

@@ -30,7 +30,6 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
       '부드러운 흙의 감촉을 느끼며 자신만의 달항아리를 빚어보세요. 초보자도 쉽게 배울 수 있습니다.',
     location: '서울 성동구 연무장길 45',
     locationDescription: '성수역 근처 카페 거리 내 위치',
-    price: 60000,
     preparation: '백자토, 조각도, 앞치마 (모두 제공)',
     parkingInfo: '주차 공간이 협소하니 가급적 대중교통 이용 부탁드립니다.',
     guidelines: '흙이 묻을 수 있으니 편한 복장으로 오세요.',
@@ -44,6 +43,7 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
         capacity: 8,
         currentNum: 3,
         status: 'RECRUITING',
+        price: 60000,
       },
       {
         id: 2,
@@ -53,6 +53,7 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
         capacity: 8,
         currentNum: 8,
         status: 'FULL',
+        price: 60000,
       },
       {
         id: 3,
@@ -62,6 +63,7 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
         capacity: 8,
         currentNum: 5,
         status: 'RECRUITING',
+        price: 55000,
       },
     ],
   },

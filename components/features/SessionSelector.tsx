@@ -50,6 +50,11 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     {(startTime || '--:--').slice(0, 5)} ~{' '}
                                     {(endTime || '--:--').slice(0, 5)}
                                 </div>
+                                {session.price !== undefined && session.price !== null && (
+                                    <div className={`text-xs font-bold mt-1 ${isSelected ? 'text-[#3182F6]' : 'text-[#191F28]'}`}>
+                                        {session.price.toLocaleString()}원
+                                    </div>
+                                )}
                             </div>
                             <div
                                 className={`text-[10px] font-bold px-2 py-1 rounded ${isSelected
