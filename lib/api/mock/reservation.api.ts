@@ -1,8 +1,8 @@
 import {
   ReservationApi,
   CreateReservationRequest,
-  ReservationItem,
   ReservationDetail,
+  SessionReservationInfo,
 } from '../types';
 import { demoClasses, demoReservationDetails } from './demo-data';
 import { loadReservations, saveReservations } from './storage';
@@ -20,26 +20,24 @@ export const reservationApiMock: ReservationApi = {
     const classItem = Object.values(demoClasses).find((c) => c.id === classId);
     if (!classItem) throw new Error('클래스를 찾을 수 없습니다.');
 
-    const session = classItem.sessions.find(
-      (s) => s.sessionId === data.sessionId
+    const session = (classItem.sessions ?? []).find(
+      (s) => s.id === data.sessionId
     );
     if (!session) throw new Error('세션을 찾을 수 없습니다.');
 
     demoReservationDetails[newId] = {
       reservationId: newId,
-      classTitle: classItem.title,
-      classCode: classCode,
-      classImageUrl: classItem.images[0],
-      classLocation: classItem.location,
-      date: session.date,
-      startTime: session.startTime,
-      endTime: session.endTime,
+      classTitle: classItem.name ?? '',
+      classImageUrl: classItem.imageUrls?.[0] ?? '',
+      classLocation: classItem.location ?? '',
+      date: session.date ?? '',
+      startTime: session.startTime ?? '',
+      endTime: session.endTime ?? '',
       applicantName: data.applicantName,
       phoneNumber: data.phoneNumber,
-      capacity: session.capacity,
-      currentNum: session.currentNum + 1,
-      sessionStatus: session.status,
-      password: data.password,
+      capacity: session.capacity ?? 0,
+      currentNum: (session.currentNum ?? 0) + 1,
+      sessionStatus: session.status ?? '',
     };
 
     saveReservations(demoReservationDetails);
@@ -47,18 +45,11 @@ export const reservationApiMock: ReservationApi = {
     return newId;
   },
 
-  search: async (name: string, phone: string, password: string): Promise<ReservationItem[]> => {
+  search: async (name: string, phone: string, password: string): Promise<ReservationDetail[]> => {
     loadReservations(demoReservationDetails);
-    return Object.values(demoReservationDetails)
-      .filter((r) => r.applicantName === name && r.phoneNumber === phone && r.password === password)
-      .map((r) => ({
-        reservationId: r.reservationId,
-        classTitle: r.classTitle,
-        date: r.date,
-        startTime: r.startTime,
-        endTime: r.endTime,
-        applicantName: r.applicantName,
-      }));
+    return Object.values(demoReservationDetails).filter(
+      (r) => r.applicantName === name && r.phoneNumber === phone
+    );
   },
 
   getById: async (reservationId: number | string): Promise<ReservationDetail> => {
@@ -79,5 +70,10 @@ export const reservationApiMock: ReservationApi = {
       saveReservations(demoReservationDetails);
     }
     console.log('Mock 예약 취소:', reservationId);
+  },
+
+  getBySessionId: async (sessionId: number): Promise<SessionReservationInfo[]> => {
+    // Mock에서는 빈 배열 반환 또는 더미 로직
+    return [];
   },
 };

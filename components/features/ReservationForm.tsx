@@ -10,6 +10,7 @@ interface ReservationFormProps {
     onPasswordChange: (value: string) => void;
     selectedDate: string;
     selectedTime: string;
+    selectedPrice?: number;
 }
 
 export const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -21,6 +22,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     onPasswordChange,
     selectedDate,
     selectedTime,
+    selectedPrice,
 }) => {
     return (
         <section className="px-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -29,6 +31,11 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 <p className="text-sm font-bold text-[#191F28]">
                     {selectedDate} {selectedTime}
                 </p>
+                {selectedPrice !== undefined && selectedPrice !== null && (
+                    <p className="text-sm font-bold text-[#3182F6] mt-1">
+                        {selectedPrice.toLocaleString()}원
+                    </p>
+                )}
             </div>
 
             <h3 className="font-bold text-[#191F28] mb-3 text-base">📝 예약자 정보</h3>
@@ -49,14 +56,10 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 <Input
                     label="비밀번호"
                     type="password"
-                    placeholder="숫자 4자리 (예: 1234)"
+                    placeholder="비밀번호 (조회용)"
                     value={password}
                     onChange={(e) => onPasswordChange(e.target.value)}
-                    maxLength={4}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                    * 예약 취소 시 필요한 4자리 비밀번호를 입력해주세요.
-                </p>
             </div>
         </section>
     );

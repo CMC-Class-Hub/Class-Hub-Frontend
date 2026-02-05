@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { classApi, reservationApi, ClassDetailResponse } from '@/lib/api';
+import { classApi, reservationApi, ClassDetailResponse, SessionResponse } from '@/lib/api';
 
 // Components
 import { Button } from '@/components/ui/Button';
@@ -17,6 +17,7 @@ export default function ClassEnrollmentPage() {
 
     // 데이터 상태
     const [classDetail, setClassDetail] = useState<ClassDetailResponse | null>(null);
+    const [sessions, setSessions] = useState<SessionResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -35,12 +36,23 @@ export default function ClassEnrollmentPage() {
     useEffect(() => {
         if (!classCode) return;
         classApi.getByClassCode(classCode as string)
-            .then((data) => {
+            .then(async (data) => {
+                console.log('Class data:', data);
                 setClassDetail(data);
+
+                // 클래스 정보를 가져온 후 세션 정보를 별도로 가져옴
+                try {
+                    const sessionList = await classApi.getSessionsByClassId(data.id);
+                    console.log('Sessions data:', sessionList);
+                    setSessions(sessionList);
+                } catch (err) {
+                    console.error('Failed to fetch sessions:', err);
+                }
+
                 setLoading(false);
             })
             .catch((err) => {
-                console.error(err);
+                console.error('Failed to fetch class detail:', err);
                 setError(true);
                 setLoading(false);
             });
@@ -83,7 +95,7 @@ export default function ClassEnrollmentPage() {
     };
 
     const getSelectedSession = () => {
-        return classDetail?.sessions.find(s => s.sessionId === selectedSessionId);
+        return sessions.find(s => s.id === selectedSessionId);
     };
 
     if (loading) return <div className="min-h-screen flex justify-center items-center bg-gray-50 text-gray-400 text-sm">로딩 중...</div>;
@@ -103,12 +115,12 @@ export default function ClassEnrollmentPage() {
                 <div className="w-full bg-gray-50 rounded-xl p-5 mb-8 space-y-3">
                     <div className="flex justify-between text-sm">
                         <span className="text-gray-500">클래스</span>
-                        <span className="font-bold text-[#333D4B] text-right truncate ml-4">{classDetail.title}</span>
+                        <span className="font-bold text-[#333D4B] text-right truncate ml-4">{classDetail.name || `클래스 #${classDetail.id}`}</span>
                     </div>
                     {session && (
                         <div className="flex justify-between text-sm">
                             <span className="text-gray-500">일시</span>
-                            <span className="font-bold text-[#333D4B]">{session.date} {session.startTime.slice(0, 5)}</span>
+                            <span className="font-bold text-[#333D4B]">{session.date} {session.startTime?.slice(0, 5)}</span>
                         </div>
                     )}
                 </div>
@@ -148,7 +160,7 @@ export default function ClassEnrollmentPage() {
                             <ClassInfoCard classDetail={classDetail} />
                             <div className="h-px bg-gray-100 my-6 mx-5"></div>
                             <SessionSelector
-                                sessions={classDetail.sessions}
+                                sessions={sessions}
                                 selectedSessionId={selectedSessionId}
                                 onSelect={(id) => { setSelectedSessionId(id); setErrorMessage(''); }}
                             />
@@ -166,7 +178,8 @@ export default function ClassEnrollmentPage() {
                                 onPhoneChange={(val) => { setPhoneNumber(val); setErrorMessage(''); }}
                                 onPasswordChange={(val) => { setPassword(val); setErrorMessage(''); }}
                                 selectedDate={getSelectedSession()?.date || ''}
-                                selectedTime={getSelectedSession()?.startTime.slice(0, 5) || ''}
+                                selectedTime={getSelectedSession()?.startTime?.slice(0, 5) || ''}
+                                selectedPrice={getSelectedSession()?.price}
                             />
                         </div>
                     )}
@@ -180,36 +193,25 @@ export default function ClassEnrollmentPage() {
                         </div>
                     )}
 
-                    {/* 가격 및 현장결제 안내 */}
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-[#191F28] font-bold text-xl">
-                                {classDetail.price.toLocaleString()}원
-                            </p>
-                            <p className="text-[#8B95A1] text-xs mt-0.5">
-                                현장에서 결제해 주세요
-                            </p>
-                        </div>
-                        {step === 'SELECTION' ? (
-                            <Button
-                                onClick={() => setStep('INPUT')}
-                                disabled={!selectedSessionId}
-                                variant={!selectedSessionId ? "secondary" : "primary"}
-                                className="px-8"
-                            >
-                                예약하기
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={handleReserve}
-                                disabled={!applicantName || !phoneNumber || !password}
-                                variant={(!applicantName || !phoneNumber || !password) ? "secondary" : "primary"}
-                                className="px-8"
-                            >
-                                예약 완료
-                            </Button>
-                        )}
-                    </div>
+                    {step === 'SELECTION' ? (
+                        <Button
+                            onClick={() => setStep('INPUT')}
+                            disabled={!selectedSessionId}
+                            fullWidth
+                            variant={!selectedSessionId ? "secondary" : "primary"}
+                        >
+                            예약하기
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={handleReserve}
+                            disabled={!applicantName || !phoneNumber || !password}
+                            fullWidth
+                            variant={(!applicantName || !phoneNumber || !password) ? "secondary" : "primary"}
+                        >
+                            예약하기
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
