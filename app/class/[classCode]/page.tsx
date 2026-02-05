@@ -60,7 +60,7 @@ export default function ClassEnrollmentPage() {
 
     // 2. 예약 신청하기
     const handleReserve = async () => {
-        if (!selectedSessionId || !applicantName || !phoneNumber || !classDetail) return;
+        if (!selectedSessionId || !applicantName || !phoneNumber || !password || !classDetail) return;
 
         setErrorMessage('');
 
@@ -69,13 +69,18 @@ export default function ClassEnrollmentPage() {
             setErrorMessage("올바른 전화번호를 입력해주세요.");
             return;
         }
+        if (password.length !== 4) {
+            setErrorMessage("비밀번호는 4자리여야 합니다.");
+            return;
+        }
+
         const formattedPhone = cleanNumber.replace(
             /(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,
             "$1-$2-$3"
         ).replace("--", "-");
 
         try {
-            const reservationId = await reservationApi.create(classDetail.id, {
+            const reservationId = await reservationApi.create(classDetail.id, classCode as string, {
                 sessionId: selectedSessionId,
                 applicantName,
                 phoneNumber: formattedPhone,
@@ -131,7 +136,7 @@ export default function ClassEnrollmentPage() {
 
     return (
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
-            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-24">
+            <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative pb-28">
 
                 {/* 상단 네비게이션 */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-md z-10 border-b border-gray-100 px-4 py-3 flex items-center relative">
@@ -149,22 +154,22 @@ export default function ClassEnrollmentPage() {
                 </div>
 
                 <div className="p-0">
-                    <ClassInfoCard classDetail={classDetail} />
-
-                    <div className="h-px bg-gray-100 my-6 mx-5"></div>
-
-                    <div className="space-y-6">
-                        {/* Step 1: 일정 선택 */}
-                        {step === 'SELECTION' && (
+                    {/* Step 1: 클래스 정보 + 일정 선택 */}
+                    {step === 'SELECTION' && (
+                        <>
+                            <ClassInfoCard classDetail={classDetail} />
+                            <div className="h-px bg-gray-100 my-6 mx-5"></div>
                             <SessionSelector
                                 sessions={sessions}
                                 selectedSessionId={selectedSessionId}
                                 onSelect={(id) => { setSelectedSessionId(id); setErrorMessage(''); }}
                             />
-                        )}
+                        </>
+                    )}
 
-                        {/* Step 2: 정보 입력 */}
-                        {step === 'INPUT' && (
+                    {/* Step 2: 정보 입력 */}
+                    {step === 'INPUT' && (
+                        <div className="pt-6">
                             <ReservationForm
                                 applicantName={applicantName}
                                 phoneNumber={phoneNumber}
@@ -176,8 +181,8 @@ export default function ClassEnrollmentPage() {
                                 selectedTime={getSelectedSession()?.startTime?.slice(0, 5) || ''}
                                 selectedPrice={getSelectedSession()?.price}
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* 하단 고정 버튼 */}
