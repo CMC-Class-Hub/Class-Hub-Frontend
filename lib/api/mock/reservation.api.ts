@@ -10,7 +10,6 @@ import { loadReservations, saveReservations } from './storage';
 export const reservationApiMock: ReservationApi = {
   create: async (
     classId: number,
-    classCode: string,
     data: CreateReservationRequest
   ): Promise<number> => {
     loadReservations(demoReservationDetails);
@@ -27,6 +26,8 @@ export const reservationApiMock: ReservationApi = {
 
     demoReservationDetails[newId] = {
       reservationId: newId,
+      reservationStatus: 'RESERVED',
+      classCode: classItem.classCode ?? '',
       classTitle: classItem.name ?? '',
       classImageUrl: classItem.imageUrls?.[0] ?? '',
       classLocation: classItem.location ?? '',
