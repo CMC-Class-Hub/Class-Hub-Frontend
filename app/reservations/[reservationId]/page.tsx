@@ -28,12 +28,10 @@ export default function ReservationDetailPage() {
     }, [reservationId, router]);
 
     const handleCancel = async () => {
-        if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return;
-
-        try {
+        if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return;        try {
             await reservationApi.cancel(reservationId as string);
-            alert('예약이 취소되었습니다.');
-            router.push('/');
+            // 페이지 새로고침하여 취소된 상태 반영
+            window.location.reload();
         } catch (e) {
             alert(e instanceof Error ? e.message : '서버 오류가 발생했습니다.');
         }
@@ -42,6 +40,8 @@ export default function ReservationDetailPage() {
     if (loading) return <div className="min-h-screen flex justify-center items-center bg-[#F2F4F6]">로딩 중...</div>;
     if (!detail) return null;
 
+    // 취소된 예약인지 확인
+    const isCancelled = detail.reservationStatus !== 'CONFIRMED';
     return (
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
             <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative">
@@ -49,25 +49,48 @@ export default function ReservationDetailPage() {
                 <Header title="예약 내역 상세" showBack />
 
                 <div className="p-6 space-y-6">
-                    {/* 상단 상태 텍스트 */}
-                    <div>
-                        <h2 className="text-2xl font-bold text-[#191F28] leading-tight mb-2">
-                            예약이<br />확정되었습니다.
-                        </h2>
-                        <p className="text-sm text-[#8B95A1]">
-                            예약하신 클래스 정보입니다.<br />
-                            변동 사항이 있을 시 강사님이 연락드릴 예정입니다.
-                        </p>
-                    </div>
+                    {/* 상단 상태 텍스트 - 취소 여부에 따라 분기 */}
+                    {isCancelled ? (
+                        <div>
+                            <h2 className="text-2xl font-bold text-red-600 leading-tight mb-2">
+                                예약이<br />취소되었습니다.
+                            </h2>
+                            <p className="text-sm text-[#8B95A1]">
+                                해당 예약은 취소 처리되었습니다.<br />
+                                새로운 예약을 원하시면 다시 신청해주세요.
+                            </p>
+                        </div>
+                    ) : (
+                        <div>
+                            <h2 className="text-2xl font-bold text-[#191F28] leading-tight mb-2">
+                                예약이<br />확정되었습니다.
+                            </h2>
+                            <p className="text-sm text-[#8B95A1]">
+                                예약하신 클래스 정보입니다.<br />
+                                변동 사항이 있을 시 강사님이 연락드릴 예정입니다.
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 취소된 예약 알림 배지 */}
+                    {isCancelled && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                            <div className="flex items-center gap-2">
+                                <span className="text-red-600 font-bold text-sm">⚠️ 취소된 예약</span>
+                            </div>
+                            <p className="text-xs text-red-600 mt-1">
+                                이 예약은 취소 처리되어 더 이상 유효하지 않습니다.
+                            </p>
+                        </div>
+                    )}
 
                     <div className="h-px bg-gray-100"></div>
 
                     {/* 클래스 정보 */}
-                    <section>
+                    <section className={isCancelled ? 'opacity-60' : ''}>
                         <h3 className="font-bold text-[#191F28] mb-3">클래스 정보</h3>
                         <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm space-y-4">
 
-                            {/* [추가] 이미지가 존재하면 표시 */}
                             {detail.classImageUrl && (
                                 <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-2 border border-gray-100">
                                     <img
@@ -117,7 +140,7 @@ export default function ReservationDetailPage() {
                     </section>
 
                     {/* 신청자 정보 */}
-                    <section>
+                    <section className={isCancelled ? 'opacity-60' : ''}>
                         <h3 className="font-bold text-[#191F28] mb-3">예약자 정보</h3>
                         <div className="bg-[#F9FAFB] rounded-xl p-5 space-y-3 text-sm">
                             <div className="flex justify-between">
@@ -132,7 +155,7 @@ export default function ReservationDetailPage() {
                     </section>
                 </div>
 
-                {/* 하단 버튼 영역 */}
+                {/* 하단 버튼 영역 - 취소 여부에 따라 분기 */}
                 <div className="p-6 pt-0 space-y-3">
                     <Button
                         onClick={() => router.push('/')}
@@ -141,13 +164,15 @@ export default function ReservationDetailPage() {
                         홈으로 돌아가기
                     </Button>
 
-                    <Button
-                        onClick={handleCancel}
-                        fullWidth
-                        variant="danger"
-                    >
-                        예약 취소하기
-                    </Button>
+                    {!isCancelled && (
+                        <Button
+                            onClick={handleCancel}
+                            fullWidth
+                            variant="danger"
+                        >
+                            예약 취소하기
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

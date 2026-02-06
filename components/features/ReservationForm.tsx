@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from '../ui/Input';
 
 interface ReservationFormProps {
@@ -24,6 +24,49 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     selectedTime,
     selectedPrice,
 }) => {
+    const [phoneError, setPhoneError] = useState<string>('');
+
+    // 전화번호 포맷팅 함수
+    const formatPhoneNumber = (value: string) => {
+        const numbers = value.replace(/[^\d]/g, '');
+        
+        if (numbers.length <= 3) {
+            return numbers;
+        } else if (numbers.length <= 7) {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+        } else if (numbers.length <= 11) {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+        }
+        
+        return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+    };
+
+    // 전화번호 유효성 검사
+    const validatePhoneNumber = (value: string) => {
+        const numbers = value.replace(/[^\d]/g, '');
+        
+        if (numbers.length === 0) {
+            setPhoneError('');
+            return;
+        }
+        
+        if (numbers.length < 11) {
+            setPhoneError('올바르지 않은 전화번호입니다');
+        } else {
+            setPhoneError('');
+        }
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formatted = formatPhoneNumber(e.target.value);
+        onPhoneChange(formatted);
+        validatePhoneNumber(formatted);
+    };
+
+    const handlePhoneBlur = () => {
+        validatePhoneNumber(phoneNumber);
+    };
+
     return (
         <section className="px-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div className="bg-blue-50 p-4 rounded-xl mb-6 border border-blue-100">
@@ -46,13 +89,23 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     value={applicantName}
                     onChange={(e) => onNameChange(e.target.value)}
                 />
-                <Input
-                    label="연락처"
-                    type="tel"
-                    placeholder="01012345678"
-                    value={phoneNumber}
-                    onChange={(e) => onPhoneChange(e.target.value)}
-                />
+                <div>
+                    <Input
+                        label="연락처"
+                        type="tel"
+                        placeholder="010-1234-5678"
+                        value={phoneNumber}
+                        onChange={handlePhoneChange}
+                        onBlur={handlePhoneBlur}
+                        maxLength={13}
+                        className={phoneError ? 'border-red-500' : ''}
+                    />
+                    {phoneError && (
+                        <p className="text-red-500 text-xs mt-1">
+                            {phoneError}
+                        </p>
+                    )}
+                </div>
                 <Input
                     label="비밀번호"
                     type="password"
