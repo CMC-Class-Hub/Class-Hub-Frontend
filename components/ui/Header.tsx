@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
                     ←
                 </button>
             )}
-            <span className="font-bold text-[#191F28] text-sm mx-auto absolute left-0 right-0 text-center z-10">
+            <span className="font-bold text-[#191F28] text-sm mx-auto z-10">
                 {title}
             </span>
             {rightAction && (

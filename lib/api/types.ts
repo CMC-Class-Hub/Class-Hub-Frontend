@@ -50,6 +50,7 @@ export interface UpdateMemberRequest {
 export interface ReservationDetail {
   reservationId: number;
   classTitle: string;
+  classCode: string;
   classImageUrl?: string;
   classLocation: string;
   date: string;
@@ -60,7 +61,7 @@ export interface ReservationDetail {
   capacity: number;
   currentNum: number;
   sessionStatus: string;
-  reservationStatus: string;  
+  reservationStatus: string; 
 }
 
 // search 응답도 ReservationDetail과 동일함

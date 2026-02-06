@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { ClassDetailResponse } from '@/lib/api';
 
 interface ClassInfoCardProps {

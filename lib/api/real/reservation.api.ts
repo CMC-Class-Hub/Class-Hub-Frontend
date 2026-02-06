@@ -9,6 +9,7 @@ import {
 export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
+    classCode: string,
     data: CreateReservationRequest
   ): Promise<number> => {
     console.log('create reservation', data);
