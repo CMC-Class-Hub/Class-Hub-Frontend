@@ -73,6 +73,8 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
 export const demoReservationList: ReservationItem[] = [
   {
     reservationId: 1,
+    classCode: 'test',
+    reservationStatus: 'RESERVED',
     classTitle: '감성 가득 달항아리 만들기',
     classCode: 'test',
     classImageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
@@ -94,6 +96,7 @@ export const demoReservationDetails: Record<number, ReservationDetail> = {
     reservationId: 1,
     classTitle: '감성 가득 달항아리 만들기',
     classCode: 'test',
+    reservationStatus: 'RESERVED',
     classImageUrl:
       'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
     classLocation: '서울 성동구 연무장길 45',
@@ -105,6 +108,5 @@ export const demoReservationDetails: Record<number, ReservationDetail> = {
     capacity: 8,
     currentNum: 3,
     sessionStatus: 'RECRUITING',
-    password: '1234',
   },
 };

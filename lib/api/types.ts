@@ -61,7 +61,7 @@ export interface ReservationDetail {
   capacity: number;
   currentNum: number;
   sessionStatus: string;
-  password?: string;
+  reservationStatus: string; 
 }
 
 // search 응답도 ReservationDetail과 동일함
