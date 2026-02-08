@@ -20,6 +20,7 @@ export default function ClassEnrollmentPage() {
     const [sessions, setSessions] = useState<SessionResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [linkDisabled, setLinkDisabled] = useState(false); // 링크 비활성화 상태
 
     // 입력 상태
     const [step, setStep] = useState<'SELECTION' | 'INPUT' | 'COMPLETED'>('SELECTION');
@@ -37,13 +38,18 @@ export default function ClassEnrollmentPage() {
         if (!classCode) return;
         classApi.getByClassCode(classCode as string)
             .then(async (data) => {
-                console.log('Class data:', data);
-                setClassDetail(data);
+                // 링크 공유 상태 확인
+                if (data.linkShareStatus !== 'ENABLED') {
+                    setLinkDisabled(true);
+                    setLoading(false);
+                    return;
+                }
 
+                setClassDetail(data);
+                console.log(data);
                 // 클래스 정보를 가져온 후 세션 정보를 별도로 가져옴
                 try {
                     const sessionList = await classApi.getSessionsByClassId(data.id);
-                    console.log('Sessions data:', sessionList);
                     setSessions(sessionList);
                 } catch (err) {
                     console.error('Failed to fetch sessions:', err);
@@ -98,8 +104,62 @@ export default function ClassEnrollmentPage() {
         return sessions.find(s => s.id === selectedSessionId);
     };
 
-    if (loading) return <div className="min-h-screen flex justify-center items-center bg-gray-50 text-gray-400 text-sm">로딩 중...</div>;
-    if (error || !classDetail) return <div className="min-h-screen flex justify-center items-center">클래스를 찾을 수 없습니다.</div>;
+    if (loading) {
+        return (
+            <div className="min-h-screen flex justify-center items-center bg-gray-50 text-gray-400 text-sm">
+                로딩 중...
+            </div>
+        );
+    }
+
+    // 링크가 비활성화된 경우
+    if (linkDisabled) {
+        return (
+            <div className="min-h-screen bg-[#F2F4F6] flex justify-center items-center p-4">
+                <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 text-center">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span className="text-4xl">🔒</span>
+                    </div>
+                    <h2 className="text-2xl font-bold text-[#191F28] mb-3">
+                        접근할 수 없는 클래스입니다
+                    </h2>
+                    <p className="text-[#6B7684] leading-relaxed mb-6">
+                        이 클래스는 현재 링크 공유가 비활성화되어 있어<br />
+                        신청을 받지 않고 있습니다.
+                    </p>
+                    <Link href="/reservations">
+                        <Button fullWidth variant="secondary">
+                            예약 내역 확인하기
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    // 클래스를 찾을 수 없는 경우
+    if (error || !classDetail) {
+        return (
+            <div className="min-h-screen bg-[#F2F4F6] flex justify-center items-center p-4">
+                <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 text-center">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span className="text-4xl">❌</span>
+                    </div>
+                    <h2 className="text-2xl font-bold text-[#191F28] mb-3">
+                        존재하지 않는 클래스입니다
+                    </h2>
+                    <p className="text-[#6B7684] leading-relaxed mb-6">
+                        잘못된 링크이거나 삭제된 클래스입니다.
+                    </p>
+                    <Link href="/reservations">
+                        <Button fullWidth variant="secondary">
+                            예약 내역 확인하기
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     if (step === 'COMPLETED') {
         const session = getSelectedSession();
