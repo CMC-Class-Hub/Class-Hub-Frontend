@@ -25,6 +25,7 @@ export interface ClassDetailResponse {
   policy?: string;
   instructorId?: number;
   sessions?: SessionResponse[];
+  linkShareStatus?: string;
 }
 
 // Student/Member 타입
