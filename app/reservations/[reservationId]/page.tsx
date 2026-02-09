@@ -126,8 +126,15 @@ export default function ReservationDetailPage() {
                                 </div>
                                 <div>
                                     <div className="text-xs font-bold text-[#8B95A1] mb-1">모집 상태</div>
-                                    <div className={`font-medium ${detail.sessionStatus === 'FULL' ? 'text-red-500' : 'text-green-600'}`}>
-                                        {detail.sessionStatus === 'FULL' ? '마감됨' : '모집중'}
+                                    <div className={`font-medium ${detail.sessionStatus === 'FULL' || detail.sessionStatus === 'CLOSED'
+                                        ? 'text-red-500'
+                                        : 'text-green-600'
+                                        }`}>
+                                        {detail.sessionStatus === 'FULL'
+                                            ? '마감됨'
+                                            : detail.sessionStatus === 'CLOSED'
+                                                ? '종료됨'
+                                                : '모집중'}
                                     </div>
                                 </div>
                             </div>
