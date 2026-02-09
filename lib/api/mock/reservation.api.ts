@@ -42,7 +42,6 @@ export const reservationApiMock: ReservationApi = {
     };
 
     saveReservations(demoReservationDetails);
-    console.log('Mock 예약 생성 완료:', demoReservationDetails[newId]);
     return newId;
   },
 
@@ -70,7 +69,6 @@ export const reservationApiMock: ReservationApi = {
       delete demoReservationDetails[id];
       saveReservations(demoReservationDetails);
     }
-    console.log('Mock 예약 취소:', reservationId);
   },
 
   getBySessionId: async (sessionId: number): Promise<SessionReservationInfo[]> => {
