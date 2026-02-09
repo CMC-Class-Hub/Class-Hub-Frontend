@@ -72,10 +72,9 @@ export default function CheckReservationPage() {
                         <Input
                             label="비밀번호"
                             type="password"
-                            placeholder="예약 시 입력한 4자리 비밀번호"
+                            placeholder="예약 시 설정한 비밀번호"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            maxLength={4}
                         />
                         <Button type="submit" fullWidth>
                             조회하기

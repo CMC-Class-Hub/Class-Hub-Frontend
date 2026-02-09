@@ -2,18 +2,16 @@ import { API_URL } from '../api-config';
 import {
   ReservationApi,
   CreateReservationRequest,
-  ReservationItem,
   ReservationDetail,
+  SessionReservationInfo,
 } from '../types';
 
 export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
-    classCode: string,
     data: CreateReservationRequest
   ): Promise<number> => {
-    // Note: classCode is available but currently unused in this specific endpoint if only classId is needed.
-    // However, keeping the signature consistent with the interface.
+    console.log('create reservation', data);
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -29,11 +27,9 @@ export const reservationApiReal: ReservationApi = {
     return res.json();
   },
 
-  search: async (name: string, phone: string, password: string): Promise<ReservationItem[]> => {
-    // Note: password might be used for verification in a future update or different endpoint.
-    // For now, ignoring it in the query string to maintain existing behavior while satisfying type signature.
+  search: async (name: string, phone: string, password: string): Promise<ReservationDetail[]> => {
     const res = await fetch(
-      `${API_URL}/api/reservations/search?name=${name}&phone=${phone}`
+      `${API_URL}/api/reservations/search?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&password=${encodeURIComponent(password)}`
     );
     if (!res.ok) return [];
     return res.json();
@@ -50,5 +46,11 @@ export const reservationApiReal: ReservationApi = {
       method: 'DELETE',
     });
     if (!res.ok) throw new Error('취소에 실패했습니다.');
+  },
+
+  getBySessionId: async (sessionId: number): Promise<SessionReservationInfo[]> => {
+    const res = await fetch(`${API_URL}/api/reservations/session/${sessionId}`);
+    if (!res.ok) throw new Error('세션별 예약 목록을 가져올 수 없습니다.');
+    return res.json();
   },
 };
