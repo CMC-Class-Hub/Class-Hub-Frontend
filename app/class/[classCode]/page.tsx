@@ -46,19 +46,17 @@ export default function ClassEnrollmentPage() {
                 }
 
                 setClassDetail(data);
-                console.log(data);
                 // 클래스 정보를 가져온 후 세션 정보를 별도로 가져옴
                 try {
                     const sessionList = await classApi.getSessionsByClassId(data.id);
                     setSessions(sessionList);
                 } catch (err) {
-                    console.error('Failed to fetch sessions:', err);
+                    setSessions([]);
                 }
 
                 setLoading(false);
             })
             .catch((err) => {
-                console.error('Failed to fetch class detail:', err);
                 setError(true);
                 setLoading(false);
             });

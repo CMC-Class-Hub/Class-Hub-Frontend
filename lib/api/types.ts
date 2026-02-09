@@ -26,6 +26,9 @@ export interface ClassDetailResponse {
   instructorId?: number;
   sessions?: SessionResponse[];
   linkShareStatus?: string;
+  cancellationPolicy?: string;
+  locationDetails?: string;
+  instructions?: string;
 }
 
 // Student/Member 타입
