@@ -11,7 +11,6 @@ export const reservationApiReal: ReservationApi = {
     classId: number,
     data: CreateReservationRequest
   ): Promise<number> => {
-    console.log('create reservation', data);
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {

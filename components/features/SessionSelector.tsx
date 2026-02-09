@@ -177,20 +177,22 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                             const startTime = session.startTime ?? '';
                             const endTime = session.endTime ?? '';
 
+                            const isClosed = session.status === 'CLOSED';
                             const isFull = session.status === 'FULL' || currentNum >= capacity;
+                            const isDisabled = isClosed || isFull;
                             const isSelected = selectedSessionId === session.id;
 
                             return (
                                 <button
                                     key={session.id}
-                                    disabled={isFull}
+                                    disabled={isDisabled}
                                     onClick={() => onSelect(session.id)}
                                     className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${
                                         isSelected
                                             ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]'
                                             : 'border-gray-200 bg-white hover:bg-gray-50'
                                     } ${
-                                        isFull
+                                        isDisabled
                                             ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100'
                                             : ''
                                     }`}
@@ -212,10 +214,14 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                         className={`text-[10px] font-bold px-2 py-1 rounded ${
                                             isSelected
                                                 ? 'bg-[#3182F6] text-white'
+                                                : isClosed
+                                                ? 'bg-gray-400 text-white'
+                                                : isFull
+                                                ? 'bg-red-100 text-red-600'
                                                 : 'bg-[#F2F4F6] text-[#6B7684]'
                                         }`}
                                     >
-                                        {isFull ? '마감' : `${currentNum}/${capacity}명`}
+                                        {isClosed ? '종료' : isFull ? '마감' : `${currentNum}/${capacity}명`}
                                     </div>
                                 </button>
                             );
