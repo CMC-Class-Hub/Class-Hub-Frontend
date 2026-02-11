@@ -323,7 +323,7 @@ export default function ClassEnrollmentPage() {
                                                     회사는 원활한 서비스 제공을 위해 아래와 같이 개인정보 처리 업무를 위탁하고 있습니다.
                                                 </p>
                                                 <div className="ml-2 space-y-0.5">
-                                                    <p>- 위탁받는 자: 솔라티(Solati)</p>
+                                                    <p>- 위탁받는 자: 솔라피(Solapi)</p>
                                                     <p>- 위탁 업무 내용: 문자메시지(SMS/LMS) 및 알림톡 발송</p>
                                                     <p>- 위탁하는 개인정보 항목: 휴대전화번호</p>
                                                     <p>- 보유 및 이용 기간: 메시지 발송 목적 달성 시까지</p>
