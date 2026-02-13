@@ -65,9 +65,20 @@ export default function CheckReservationPage() {
                         <Input
                             label="연락처"
                             type="tel"
-                            placeholder="예: 01012345678"
+                            placeholder="예: 010-1234-5678"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => {
+                                const raw = e.target.value.replace(/[^0-9]/g, '');
+                                let formatted = raw;
+                                if (raw.length < 4) {
+                                    formatted = raw;
+                                } else if (raw.length < 8) {
+                                    formatted = `${raw.slice(0, 3)}-${raw.slice(3)}`;
+                                } else {
+                                    formatted = `${raw.slice(0, 3)}-${raw.slice(3, 7)}-${raw.slice(7, 11)}`;
+                                }
+                                setPhone(formatted);
+                            }}
                         />
                         <Input
                             label="비밀번호"
