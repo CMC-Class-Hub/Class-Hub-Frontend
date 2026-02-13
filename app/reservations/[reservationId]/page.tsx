@@ -42,6 +42,13 @@ export default function ReservationDetailPage() {
 
     // 취소된 예약인지 확인
     const isCancelled = detail.reservationStatus !== 'CONFIRMED';
+
+    // 취소 가능 여부 (세션 시작 12시간 전까지만)
+    const canCancel = () => {
+        const sessionStart = new Date(`${detail.date}T${detail.startTime}`);
+        const deadline = new Date(sessionStart.getTime() - 12 * 60 * 60 * 1000);
+        return new Date() < deadline;
+    };
     return (
         <div className="min-h-screen bg-[#F2F4F6] flex justify-center">
             <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl relative">
@@ -172,13 +179,21 @@ export default function ReservationDetailPage() {
                     </Button>
 
                     {!isCancelled && (
-                        <Button
-                            onClick={handleCancel}
-                            fullWidth
-                            variant="danger"
-                        >
-                            예약 취소하기
-                        </Button>
+                        <div className="space-y-2">
+                            <Button
+                                onClick={handleCancel}
+                                fullWidth
+                                variant="danger"
+                                disabled={!canCancel()}
+                            >
+                                예약 취소하기
+                            </Button>
+                            {!canCancel() && (
+                                <p className="text-center text-xs text-[#8B95A1]">
+                                    12시간 전까지 취소 가능
+                                </p>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
