@@ -36,7 +36,7 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
         const lastDay = new Date(year, month + 1, 0);
         const startDate = new Date(firstDay);
         startDate.setDate(startDate.getDate() - startDate.getDay());
-        
+
         const weeks: Date[][] = [];
         let currentWeek: Date[] = [];
         const endDate = new Date(lastDay);
@@ -90,7 +90,7 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
     return (
         <section className="px-5">
             <h3 className="font-bold text-[#191F28] mb-3 text-base">📅 일정 선택</h3>
-            
+
             {/* 월 선택 헤더 */}
             <div className="flex items-center justify-center mb-4 gap-4">
                 <button
@@ -115,9 +115,8 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                 {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => (
                     <div
                         key={day}
-                        className={`text-center text-xs font-medium py-2 ${
-                            idx === 0 ? 'text-red-500' : idx === 6 ? 'text-blue-500' : 'text-gray-600'
-                        }`}
+                        className={`text-center text-xs font-medium py-2 ${idx === 0 ? 'text-red-500' : idx === 6 ? 'text-blue-500' : 'text-gray-600'
+                            }`}
                     >
                         {day}
                     </div>
@@ -187,19 +186,17 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     key={session.id}
                                     disabled={isDisabled}
                                     onClick={() => onSelect(session.id)}
-                                    className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${
-                                        isSelected
+                                    className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${isSelected
                                             ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]'
                                             : 'border-gray-200 bg-white hover:bg-gray-50'
-                                    } ${
-                                        isDisabled
+                                        } ${isDisabled
                                             ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100'
                                             : ''
-                                    }`}
+                                        }`}
                                 >
                                     <div>
                                         <div className="text-sm font-bold text-[#333D4B]">
-                                            오후 {(startTime || '--:--').slice(0, 5)}
+                                            {(startTime || '--:--').slice(0, 5)} ~ {(endTime || '--:--').slice(0, 5)}
                                         </div>
                                         <div className="text-xs text-[#8B95A1] mt-0.5">
                                             {capacity}명
@@ -211,15 +208,14 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                         )}
                                     </div>
                                     <div
-                                        className={`text-[10px] font-bold px-2 py-1 rounded ${
-                                            isSelected
+                                        className={`text-[10px] font-bold px-2 py-1 rounded ${isSelected
                                                 ? 'bg-[#3182F6] text-white'
                                                 : isClosed
-                                                ? 'bg-gray-400 text-white'
-                                                : isFull
-                                                ? 'bg-red-100 text-red-600'
-                                                : 'bg-[#F2F4F6] text-[#6B7684]'
-                                        }`}
+                                                    ? 'bg-gray-400 text-white'
+                                                    : isFull
+                                                        ? 'bg-red-100 text-red-600'
+                                                        : 'bg-[#F2F4F6] text-[#6B7684]'
+                                            }`}
                                     >
                                         {isClosed ? '종료' : isFull ? '마감' : `${currentNum}/${capacity}명`}
                                     </div>
