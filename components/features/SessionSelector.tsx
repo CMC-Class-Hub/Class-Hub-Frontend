@@ -114,8 +114,10 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
         hour = hour % 12;
         hour = hour ? hour : 12; // 0시는 12시로 표시
 
-        // 분이 00분이면 '오전 10시', 아니면 '오전 10:30'
-        return `${ampm} ${hour}${minute === 0 ? '시' : `:${String(minute).padStart(2, '0')}`}`;
+        const paddedHour = String(hour).padStart(2, '0');
+        const paddedMinute = String(minute).padStart(2, '0');
+
+        return `${ampm} ${paddedHour}:${paddedMinute}`;
     };
 
     const selectedDateSessions = selectedDate ? sessionsByDate[selectedDate] || [] : [];
