@@ -4,10 +4,8 @@ import { Input } from '../ui/Input';
 interface ReservationFormProps {
     applicantName: string;
     phoneNumber: string;
-    password: string;
     onNameChange: (value: string) => void;
     onPhoneChange: (value: string) => void;
-    onPasswordChange: (value: string) => void;
     selectedDate: string;
     selectedTime: string;
     selectedPrice?: number;
@@ -16,10 +14,8 @@ interface ReservationFormProps {
 export const ReservationForm: React.FC<ReservationFormProps> = ({
     applicantName,
     phoneNumber,
-    password,
     onNameChange,
     onPhoneChange,
-    onPasswordChange,
     selectedDate,
     selectedTime,
     selectedPrice,
@@ -29,7 +25,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     // 전화번호 포맷팅 함수
     const formatPhoneNumber = (value: string) => {
         const numbers = value.replace(/[^\d]/g, '');
-        
+
         if (numbers.length <= 3) {
             return numbers;
         } else if (numbers.length <= 7) {
@@ -37,19 +33,19 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         } else if (numbers.length <= 11) {
             return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
         }
-        
+
         return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
     };
 
     // 전화번호 유효성 검사
     const validatePhoneNumber = (value: string) => {
         const numbers = value.replace(/[^\d]/g, '');
-        
+
         if (numbers.length === 0) {
             setPhoneError('');
             return;
         }
-        
+
         if (numbers.length < 11) {
             setPhoneError('올바르지 않은 전화번호입니다');
         } else {
@@ -106,13 +102,6 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         </p>
                     )}
                 </div>
-                <Input
-                    label="비밀번호"
-                    type="password"
-                    placeholder="비밀번호 (조회용)"
-                    value={password}
-                    onChange={(e) => onPasswordChange(e.target.value)}
-                />
             </div>
         </section>
     );
