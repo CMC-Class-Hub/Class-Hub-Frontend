@@ -31,7 +31,7 @@ export default function ReservationDetailPage() {
 
     const handleCancel = async () => {
         try {
-            await reservationApi.cancel(reservationId as string);
+            await reservationApi.cancel(reservationCode as string);
             setShowCancelModal(false);
             window.location.reload();
         } catch (e) {

@@ -25,7 +25,6 @@ export default function CheckReservationPage() {
         const newErrors: { name?: string; phone?: string; password?: string } = {};
         if (!name) newErrors.name = '이름을 입력해주세요';
         if (!phone) newErrors.phone = '연락처를 입력해주세요';
-        if (!password) newErrors.password = '비밀번호를 입력해주세요';
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
