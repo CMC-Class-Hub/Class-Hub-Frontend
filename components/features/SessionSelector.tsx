@@ -101,6 +101,23 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
         });
     };
 
+    // 시간 포맷팅 (HH:mm -> 오전/오후 h:mm)
+    const formatTime = (timeStr: string) => {
+        if (!timeStr) return '--:--';
+        const [hourStr, minuteStr] = timeStr.split(':');
+        let hour = parseInt(hourStr, 10);
+        const minute = parseInt(minuteStr, 10);
+
+        if (isNaN(hour) || isNaN(minute)) return timeStr.slice(0, 5);
+
+        const ampm = hour >= 12 ? '오후' : '오전';
+        hour = hour % 12;
+        hour = hour ? hour : 12; // 0시는 12시로 표시
+
+        // 분이 00분이면 '오전 10시', 아니면 '오전 10:30'
+        return `${ampm} ${hour}${minute === 0 ? '시' : `:${String(minute).padStart(2, '0')}`}`;
+    };
+
     const selectedDateSessions = selectedDate ? sessionsByDate[selectedDate] || [] : [];
 
     return (
@@ -158,18 +175,20 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     onClick={() => handleDateClick(date)}
                                     disabled={isDisabled}
                                     className={`
-                                        relative aspect-square p-1 rounded-lg text-sm transition-all
-                                        ${!isCurrent || isPast || !hasSessions ? 'text-gray-300' : dayIdx === 0 ? 'text-red-500' : dayIdx === 6 ? 'text-blue-500' : ''}
-                                        ${today && !isSelected ? 'bg-blue-50 font-bold' : ''}
-                                        ${isSelected ? 'bg-[#3182F6] text-white font-bold ring-2 ring-[#3182F6]' : ''}
-                                        ${hasSessions && !isSelected && !isPast ? 'hover:bg-gray-100 cursor-pointer' : ''}
-                                        ${isDisabled ? 'cursor-not-allowed' : ''}
+                                        relative aspect-square flex items-center justify-center
+                                        ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
                                     `}
                                 >
-                                    <div className="flex flex-col items-center justify-center h-full">
-                                        <span>{date.getDate()}</span>
-                                        {hasSessions && !isSelected && !isPast && (
-                                            <div className={`absolute bottom-1 w-1 h-1 rounded-full ${hasOpenSession(date) ? 'bg-[#3182F6]' : 'bg-gray-300'}`} />
+                                    <div className={`
+                                        w-10 h-10 flex flex-col items-center justify-center rounded-full transition-all relative
+                                        ${isSelected ? 'bg-[#3182F6] text-white font-bold' : ''}
+                                        ${!isSelected && !isPast && hasSessions ? 'hover:bg-gray-100' : ''}
+                                        ${today && !isSelected ? 'text-[#3182F6] font-bold' : ''}
+                                        ${!isCurrent || isPast || !hasSessions ? 'text-gray-300' : dayIdx === 0 ? 'text-red-500' : dayIdx === 6 ? 'text-blue-500' : 'text-[#333D4B]'}
+                                    `}>
+                                        <span className="text-sm z-10 leading-none mt-0.5">{date.getDate()}</span>
+                                        {hasSessions && !isPast && (
+                                            <div className={`absolute -bottom-1 w-1 h-1 rounded-full ${isSelected ? 'bg-white' : hasOpenSession(date) ? 'bg-[#3182F6]' : 'bg-gray-300'}`} />
                                         )}
                                     </div>
                                 </button>
@@ -203,8 +222,8 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     disabled={isDisabled}
                                     onClick={() => onSelect(session.id)}
                                     className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${isSelected
-                                            ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]'
-                                            : 'border-gray-200 bg-white hover:bg-gray-50'
+                                        ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]'
+                                        : 'border-gray-200 bg-white hover:bg-gray-50'
                                         } ${isDisabled
                                             ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100'
                                             : ''
@@ -212,7 +231,7 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                 >
                                     <div>
                                         <div className="text-sm font-bold text-[#333D4B]">
-                                            {(startTime || '--:--').slice(0, 5)} ~ {(endTime || '--:--').slice(0, 5)}
+                                            {formatTime(startTime)} ~ {formatTime(endTime)}
                                         </div>
                                         <div className="text-xs text-[#8B95A1] mt-0.5">
                                             {capacity}명
@@ -225,12 +244,12 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     </div>
                                     <div
                                         className={`text-[10px] font-bold px-2 py-1 rounded ${isSelected
-                                                ? 'bg-[#3182F6] text-white'
-                                                : isClosed
-                                                    ? 'bg-gray-400 text-white'
-                                                    : isFull
-                                                        ? 'bg-red-100 text-red-600'
-                                                        : 'bg-[#F2F4F6] text-[#6B7684]'
+                                            ? 'bg-[#3182F6] text-white'
+                                            : isClosed
+                                                ? 'bg-gray-400 text-white'
+                                                : isFull
+                                                    ? 'bg-red-100 text-red-600'
+                                                    : 'bg-[#F2F4F6] text-[#6B7684]'
                                             }`}
                                     >
                                         {isClosed ? '종료' : isFull ? '마감' : `${currentNum}/${capacity}명`}
