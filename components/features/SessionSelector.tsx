@@ -85,6 +85,22 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
         return !!sessionsByDate[formatDate(date)];
     };
 
+    const isPastDate = (date: Date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+    };
+
+    // 해당 날짜에 모집중인 세션이 있는지 확인
+    const hasOpenSession = (date: Date) => {
+        const dateSessions = sessionsByDate[formatDate(date)] || [];
+        return dateSessions.some(session => {
+            const isClosed = session.status === 'CLOSED';
+            const isFull = session.status === 'FULL' || (session.currentNum ?? 0) >= (session.capacity ?? 0);
+            return !isClosed && !isFull;
+        });
+    };
+
     const selectedDateSessions = selectedDate ? sessionsByDate[selectedDate] || [] : [];
 
     return (
@@ -133,27 +149,27 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                             const isCurrent = isCurrentMonth(date);
                             const today = isToday(date);
                             const isSelected = selectedDate === dateStr;
+                            const isPast = isPastDate(date);
+                            const isDisabled = !hasSessions || isPast;
 
                             return (
                                 <button
                                     key={dateStr}
                                     onClick={() => handleDateClick(date)}
-                                    disabled={!hasSessions}
+                                    disabled={isDisabled}
                                     className={`
                                         relative aspect-square p-1 rounded-lg text-sm transition-all
-                                        ${!isCurrent ? 'text-gray-300' : ''}
-                                        ${dayIdx === 0 && isCurrent ? 'text-red-500' : ''}
-                                        ${dayIdx === 6 && isCurrent ? 'text-blue-500' : ''}
+                                        ${!isCurrent || isPast || !hasSessions ? 'text-gray-300' : dayIdx === 0 ? 'text-red-500' : dayIdx === 6 ? 'text-blue-500' : ''}
                                         ${today && !isSelected ? 'bg-blue-50 font-bold' : ''}
                                         ${isSelected ? 'bg-[#3182F6] text-white font-bold ring-2 ring-[#3182F6]' : ''}
-                                        ${hasSessions && !isSelected ? 'hover:bg-gray-100 cursor-pointer' : ''}
-                                        ${!hasSessions ? 'cursor-not-allowed' : ''}
+                                        ${hasSessions && !isSelected && !isPast ? 'hover:bg-gray-100 cursor-pointer' : ''}
+                                        ${isDisabled ? 'cursor-not-allowed' : ''}
                                     `}
                                 >
                                     <div className="flex flex-col items-center justify-center h-full">
                                         <span>{date.getDate()}</span>
-                                        {hasSessions && !isSelected && (
-                                            <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#3182F6]" />
+                                        {hasSessions && !isSelected && !isPast && (
+                                            <div className={`absolute bottom-1 w-1 h-1 rounded-full ${hasOpenSession(date) ? 'bg-[#3182F6]' : 'bg-gray-300'}`} />
                                         )}
                                     </div>
                                 </button>
