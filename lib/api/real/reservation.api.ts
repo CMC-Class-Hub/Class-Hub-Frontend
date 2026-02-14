@@ -21,7 +21,14 @@ export const reservationApiReal: ReservationApi = {
     );
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(errorText);
+      let errorMessage = '예약에 실패했습니다.';
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
+      } catch {
+        errorMessage = errorText || errorMessage;
+      }
+      throw new Error(errorMessage);
     }
     return res.json();
   },
