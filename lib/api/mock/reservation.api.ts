@@ -29,6 +29,7 @@ export const reservationApiMock: ReservationApi = {
       reservationStatus: 'RESERVED',
       classCode: classItem.classCode ?? '',
       classTitle: classItem.name ?? '',
+
       classImageUrl: classItem.imageUrls?.[0] ?? '',
       classLocation: classItem.location ?? '',
       date: session.date ?? '',

@@ -76,6 +76,7 @@ export const demoReservationList: ReservationItem[] = [
     classCode: 'test',
     reservationStatus: 'RESERVED',
     classTitle: '감성 가득 달항아리 만들기',
+
     classImageUrl: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop',
     classLocation: '서울 성동구 연무장길 45',
     date: '2025-02-15',
