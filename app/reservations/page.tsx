@@ -14,7 +14,6 @@ export default function CheckReservationPage() {
     const router = useRouter();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
-    const [password, setPassword] = useState('');
     const [reservations, setReservations] = useState<ReservationItem[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ name?: string; phone?: string; password?: string }>({});
@@ -48,7 +47,7 @@ export default function CheckReservationPage() {
 
         setLoading(true);
         try {
-            const data = await reservationApi.search(name, formattedPhone, password);
+            const data = await reservationApi.search(name, formattedPhone);
             setReservations(data);
         } catch (error) {
             alert('조회 중 오류가 발생했습니다.');
@@ -92,14 +91,6 @@ export default function CheckReservationPage() {
                             }}
                             error={errors.phone}
                         />
-                        <Input
-                            label="비밀번호"
-                            type="password"
-                            placeholder="예약 시 설정한 비밀번호"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            error={errors.password}
-                        />
                         <Button type="submit" fullWidth>
                             조회하기
                         </Button>
@@ -125,7 +116,7 @@ export default function CheckReservationPage() {
                                     <li key={res.reservationId}>
                                         <ReservationResult
                                             reservation={res}
-                                            onClick={() => router.push(`/reservations/${res.reservationId}`)}
+                                            onClick={() => router.push(`/reservations/${res.reservationCode}`)}
                                         />
                                     </li>
                                 ))}

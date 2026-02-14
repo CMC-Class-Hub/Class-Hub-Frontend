@@ -10,16 +10,16 @@ import { Button } from '@/components/ui/Button';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 export default function ReservationDetailPage() {
-    const { reservationId } = useParams();
+    const { reservationCode } = useParams();
     const router = useRouter();
     const [detail, setDetail] = useState<ReservationDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [showCancelModal, setShowCancelModal] = useState(false);
 
     useEffect(() => {
-        if (!reservationId) return;
-        reservationApi.getById(reservationId as string)
-            .then(data => {
+        if (!reservationCode) return;
+        reservationApi.getByCode(reservationCode as string)
+            .then((data: ReservationDetail) => {
                 setDetail(data);
                 setLoading(false);
             })
@@ -27,7 +27,7 @@ export default function ReservationDetailPage() {
                 alert('잘못된 접근입니다.');
                 router.push('/');
             });
-    }, [reservationId, router]);
+    }, [reservationCode, router]);
 
     const handleCancel = async () => {
         try {
