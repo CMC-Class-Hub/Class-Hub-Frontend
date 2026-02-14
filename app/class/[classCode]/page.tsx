@@ -64,6 +64,22 @@ export default function ClassEnrollmentPage() {
             });
     }, [classCode]);
 
+    // 링크 유효성 재확인
+    const verifyLinkAvailability = async (): Promise<boolean> => {
+        if (!classCode) return false;
+        try {
+            const data = await classApi.getByClassCode(classCode as string);
+            if (data.linkShareStatus !== 'ENABLED') {
+                setLinkDisabled(true);
+                return false;
+            }
+            return true; // 링크가 유효하면 true
+        } catch (err) {
+            console.error(err);
+            return true; // 에러 발생 시 진행 (실제 예약 시 백엔드 검증에 맡김)
+        }
+    };
+
     // 2. 예약 신청하기
     const handleReserve = async () => {
         if (!selectedSessionId || !applicantName || !phoneNumber || !password || !classDetail) return;
@@ -75,6 +91,9 @@ export default function ClassEnrollmentPage() {
         }
 
         setErrorMessage('');
+
+        const isAvailable = await verifyLinkAvailability();
+        if (!isAvailable) return;
 
         const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
         if (cleanNumber.length < 9 || cleanNumber.length > 11) {
@@ -354,7 +373,10 @@ export default function ClassEnrollmentPage() {
 
                     {step === 'SELECTION' ? (
                         <Button
-                            onClick={() => setStep('INPUT')}
+                            onClick={async () => {
+                                const isAvailable = await verifyLinkAvailability();
+                                if (isAvailable) setStep('INPUT');
+                            }}
                             disabled={!selectedSessionId}
                             fullWidth
                             variant={!selectedSessionId ? "secondary" : "primary"}
