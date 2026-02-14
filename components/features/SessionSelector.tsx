@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ClassDetailResponse } from '@/lib/api';
+import { Clock, Users, CreditCard } from "lucide-react";
 
 interface SessionSelectorProps {
     sessions: ClassDetailResponse['sessions'];
@@ -223,38 +224,54 @@ export const SessionSelector: React.FC<SessionSelectorProps> = ({
                                     key={session.id}
                                     disabled={isDisabled}
                                     onClick={() => onSelect(session.id)}
-                                    className={`p-4 rounded-xl border text-left transition-all flex justify-between items-center ${isSelected
-                                        ? 'border-[#3182F6] bg-[#E8F3FF] ring-1 ring-[#3182F6]'
-                                        : 'border-gray-200 bg-white hover:bg-gray-50'
+                                    className={`py-3.5 px-5 rounded-2xl border text-left transition-all w-full flex justify-between items-center group relative overflow-hidden ${isSelected
+                                        ? 'border-[#3182F6] bg-blue-50/50 ring-1 ring-[#3182F6]'
+                                        : 'border-gray-100 bg-white hover:border-blue-200 hover:bg-blue-50/30 hover:shadow-sm'
                                         } ${isDisabled
-                                            ? 'opacity-50 grayscale cursor-not-allowed bg-gray-100'
+                                            ? 'opacity-50 grayscale cursor-not-allowed bg-gray-50'
                                             : ''
                                         }`}
                                 >
-                                    <div>
-                                        <div className="text-sm font-bold text-[#333D4B]">
-                                            {formatTime(startTime)} ~ {formatTime(endTime)}
-                                        </div>
-                                        <div className="text-xs text-[#8B95A1] mt-0.5">
-                                            {capacity}명
+                                    {/* Left: Time & Price */}
+                                    <div className="flex flex-col gap-1.5 z-10">
+                                        <div className="flex items-center gap-2">
+                                            <Clock className={`w-4 h-4 ${isSelected ? 'text-[#3182F6]' : 'text-gray-400 group-hover:text-[#3182F6]'}`} strokeWidth={2.5} />
+                                            <span className={`text-[15px] font-bold tracking-tight ${isSelected ? 'text-[#191F28]' : 'text-[#333D4B]'}`}>
+                                                {formatTime(startTime)} ~ {formatTime(endTime)}
+                                            </span>
                                         </div>
                                         {session.price !== undefined && session.price !== null && (
-                                            <div className="text-xs font-bold mt-1 text-[#191F28]">
-                                                {session.price.toLocaleString()}원
+                                            <div className="flex items-center gap-2">
+                                                <CreditCard className={`w-4 h-4 ${isSelected ? 'text-[#3182F6]/70' : 'text-gray-300 group-hover:text-[#3182F6]/60'}`} />
+                                                <span className={`text-[13px] font-medium ${isSelected ? 'text-[#4E5968]' : 'text-[#8B95A1]'}`}>
+                                                    {session.price.toLocaleString()}원
+                                                </span>
                                             </div>
                                         )}
                                     </div>
-                                    <div
-                                        className={`text-[10px] font-bold px-2 py-1 rounded ${isSelected
-                                            ? 'bg-[#3182F6] text-white'
-                                            : isClosed
-                                                ? 'bg-gray-400 text-white'
-                                                : isFull
-                                                    ? 'bg-red-100 text-red-600'
-                                                    : 'bg-[#F2F4F6] text-[#6B7684]'
-                                            }`}
-                                    >
-                                        {isClosed ? '종료' : isFull ? '마감' : `${currentNum}/${capacity}명`}
+
+                                    {/* Right: Capacity & Status */}
+                                    <div className="flex flex-col items-end gap-1.5 z-10">
+                                        {isClosed ? (
+                                            <span className="bg-gray-100 text-gray-400 text-[12px] font-bold px-2.5 py-1 rounded-lg">종료</span>
+                                        ) : isFull ? (
+                                            <span className="bg-red-50 text-red-500 text-[12px] font-bold px-2.5 py-1 rounded-lg">마감</span>
+                                        ) : (
+                                            <>
+                                                <div className="flex items-center gap-1.5">
+                                                    <Users className={`w-3.5 h-3.5 ${isSelected ? 'text-[#3182F6]' : 'text-gray-400 group-hover:text-[#3182F6]'}`} />
+                                                    <span className={`text-[12px] font-medium ${isSelected ? 'text-[#333D4B]' : 'text-[#6B7684]'}`}>
+                                                        <span className={isSelected ? 'text-[#3182F6] font-bold' : ''}>{currentNum}</span>
+                                                        <span className="text-gray-300 mx-0.5">/</span>
+                                                        {capacity}명
+                                                    </span>
+                                                </div>
+                                                <span className={`text-[11px] font-semibold flex items-center gap-1 ${isSelected ? 'text-[#3182F6]' : 'text-[#3182F6]'}`}>
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#3182F6] animate-pulse" />
+                                                    {capacity - currentNum}자리 남음
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                 </button>
                             );
