@@ -53,6 +53,7 @@ export interface UpdateMemberRequest {
 // Reservation 타입
 export interface ReservationDetail {
   reservationId: number;
+  reservationCode: string;
   classTitle: string;
   classCode: string;
   classImageUrl?: string;
@@ -65,7 +66,7 @@ export interface ReservationDetail {
   capacity: number;
   currentNum: number;
   sessionStatus: string;
-  reservationStatus: string; 
+  reservationStatus: string;
 }
 
 // search 응답도 ReservationDetail과 동일함
@@ -75,7 +76,6 @@ export interface CreateReservationRequest {
   sessionId: number;
   applicantName: string;
   phoneNumber: string;
-  password?: string;
 }
 
 // 강사용 특정 세션 예약 정보
@@ -96,10 +96,10 @@ export interface ClassApi {
 }
 
 export interface ReservationApi {
-  create: (classId: number, data: CreateReservationRequest) => Promise<number>;
-  search: (name: string, phone: string, password: string) => Promise<ReservationItem[]>;
-  getById: (reservationId: number | string) => Promise<ReservationDetail>;
-  cancel: (reservationId: number | string) => Promise<void>;
+  create: (classId: number, data: CreateReservationRequest) => Promise<string>;
+  search: (name: string, phone: string) => Promise<ReservationItem[]>;
+  getByCode: (reservationCode: string) => Promise<ReservationDetail>;
+  cancel: (reservationCode: string) => Promise<void>;
   getBySessionId: (sessionId: number) => Promise<SessionReservationInfo[]>;
 }
 

@@ -10,7 +10,7 @@ export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<number> => {
+  ): Promise<string> => {
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -23,25 +23,26 @@ export const reservationApiReal: ReservationApi = {
       const errorText = await res.text();
       throw new Error(errorText);
     }
-    return res.json();
+    
+    return res.text();
   },
 
-  search: async (name: string, phone: string, password: string): Promise<ReservationDetail[]> => {
+  search: async (name: string, phone: string): Promise<ReservationDetail[]> => {
     const res = await fetch(
-      `${API_URL}/api/reservations/search?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&password=${encodeURIComponent(password)}`
+      `${API_URL}/api/reservations/search?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`
     );
     if (!res.ok) return [];
     return res.json();
   },
 
-  getById: async (reservationId: number | string): Promise<ReservationDetail> => {
-    const res = await fetch(`${API_URL}/api/reservations/${reservationId}`);
+  getByCode: async (reservationCode: string): Promise<ReservationDetail> => {
+    const res = await fetch(`${API_URL}/api/reservations/${reservationCode}`);
     if (!res.ok) throw new Error('예약 정보를 찾을 수 없습니다.');
     return res.json();
   },
 
-  cancel: async (reservationId: number | string): Promise<void> => {
-    const res = await fetch(`${API_URL}/api/reservations/${reservationId}`, {
+  cancel: async (reservationCode: string): Promise<void> => {
+    const res = await fetch(`${API_URL}/api/reservations/${reservationCode}`, {
       method: 'DELETE',
     });
     if (!res.ok) throw new Error('취소에 실패했습니다.');

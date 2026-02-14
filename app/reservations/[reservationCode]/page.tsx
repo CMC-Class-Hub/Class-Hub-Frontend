@@ -9,15 +9,15 @@ import { Header } from '@/components/ui/Header';
 import { Button } from '@/components/ui/Button';
 
 export default function ReservationDetailPage() {
-    const { reservationId } = useParams();
+    const { reservationCode } = useParams();
     const router = useRouter();
     const [detail, setDetail] = useState<ReservationDetail | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!reservationId) return;
-        reservationApi.getById(reservationId as string)
-            .then(data => {
+        if (!reservationCode) return;
+        reservationApi.getByCode(reservationCode as string)
+            .then((data: ReservationDetail) => {
                 setDetail(data);
                 setLoading(false);
             })
@@ -25,11 +25,11 @@ export default function ReservationDetailPage() {
                 alert('잘못된 접근입니다.');
                 router.push('/');
             });
-    }, [reservationId, router]);
+    }, [reservationCode, router]);
 
     const handleCancel = async () => {
-        if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return;        try {
-            await reservationApi.cancel(reservationId as string);
+        if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return; try {
+            await reservationApi.cancel(reservationCode as string);
             // 페이지 새로고침하여 취소된 상태 반영
             window.location.reload();
         } catch (e) {
