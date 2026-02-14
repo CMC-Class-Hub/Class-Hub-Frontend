@@ -7,12 +7,14 @@ import { reservationApi, ReservationDetail } from '@/lib/api';
 // Components
 import { Header } from '@/components/ui/Header';
 import { Button } from '@/components/ui/Button';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 export default function ReservationDetailPage() {
     const { reservationCode } = useParams();
     const router = useRouter();
     const [detail, setDetail] = useState<ReservationDetail | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showCancelModal, setShowCancelModal] = useState(false);
 
     useEffect(() => {
         if (!reservationCode) return;
@@ -28,11 +30,12 @@ export default function ReservationDetailPage() {
     }, [reservationCode, router]);
 
     const handleCancel = async () => {
-        if (!confirm('정말 예약을 취소하시겠습니까?\n취소 후에는 복구할 수 없습니다.')) return; try {
+        try {
             await reservationApi.cancel(reservationCode as string);
-            // 페이지 새로고침하여 취소된 상태 반영
+            setShowCancelModal(false);
             window.location.reload();
         } catch (e) {
+            setShowCancelModal(false);
             alert(e instanceof Error ? e.message : '서버 오류가 발생했습니다.');
         }
     };
@@ -181,7 +184,7 @@ export default function ReservationDetailPage() {
                     {!isCancelled && (
                         <div className="space-y-2">
                             <Button
-                                onClick={handleCancel}
+                                onClick={() => setShowCancelModal(true)}
                                 fullWidth
                                 variant="danger"
                                 disabled={!canCancel()}
@@ -196,6 +199,17 @@ export default function ReservationDetailPage() {
                         </div>
                     )}
                 </div>
+
+                <ConfirmModal
+                    isOpen={showCancelModal}
+                    title="예약을 취소하시겠습니까?"
+                    description="취소 후에는 복구할 수 없습니다."
+                    confirmText="취소하기"
+                    cancelText="돌아가기"
+                    variant="danger"
+                    onConfirm={handleCancel}
+                    onCancel={() => setShowCancelModal(false)}
+                />
             </div>
         </div>
     );
