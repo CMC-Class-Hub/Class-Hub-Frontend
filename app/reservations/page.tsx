@@ -14,19 +14,27 @@ export default function CheckReservationPage() {
     const router = useRouter();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
-    const [password, setPassword] = useState('');
     const [reservations, setReservations] = useState<ReservationItem[] | null>(null);
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState<{ name?: string; phone?: string; password?: string }>({});
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name || !phone || !password) return alert('이름, 전화번호, 비밀번호를 모두 입력해주세요.');
 
-        // [수정] 전화번호 포맷팅 로직 추가 (숫자만 입력해도 하이픈 붙여서 전송)
-        const cleanNumber = phone.replace(/[^0-9]/g, '');
-        if (cleanNumber.length < 9) { // 최소 길이 체크
-            return alert("올바른 전화번호를 입력해주세요.");
+        // 개별 필드 유효성 검사
+        const newErrors: { name?: string; phone?: string; password?: string } = {};
+        if (!name) newErrors.name = '이름을 입력해주세요';
+        if (!phone) newErrors.phone = '연락처를 입력해주세요';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
         }
+
+        setErrors({});
+
+        // 전화번호 포맷팅
+        const cleanNumber = phone.replace(/[^0-9]/g, '');
 
         // 01012345678 -> 010-1234-5678 변환
         const formattedPhone = cleanNumber.length > 11
@@ -38,7 +46,7 @@ export default function CheckReservationPage() {
 
         setLoading(true);
         try {
-            const data = await reservationApi.search(name, formattedPhone, password);
+            const data = await reservationApi.search(name, formattedPhone);
             setReservations(data);
         } catch (error) {
             alert('조회 중 오류가 발생했습니다.');
@@ -61,6 +69,7 @@ export default function CheckReservationPage() {
                             placeholder="예: 김철수"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            error={errors.name}
                         />
                         <Input
                             label="연락처"
@@ -79,13 +88,7 @@ export default function CheckReservationPage() {
                                 }
                                 setPhone(formatted);
                             }}
-                        />
-                        <Input
-                            label="비밀번호"
-                            type="password"
-                            placeholder="예약 시 설정한 비밀번호"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            error={errors.phone}
                         />
                         <Button type="submit" fullWidth>
                             조회하기
@@ -112,7 +115,7 @@ export default function CheckReservationPage() {
                                     <li key={res.reservationId}>
                                         <ReservationResult
                                             reservation={res}
-                                            onClick={() => router.push(`/reservations/${res.reservationId}`)}
+                                            onClick={() => router.push(`/reservations/${res.reservationCode}`)}
                                         />
                                     </li>
                                 ))}

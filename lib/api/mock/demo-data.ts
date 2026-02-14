@@ -87,6 +87,7 @@ export const demoReservationList: ReservationItem[] = [
     capacity: 8,
     currentNum: 3,
     sessionStatus: 'RECRUITING',
+    reservationCode: 'test',
   },
 ];
 
@@ -108,5 +109,6 @@ export const demoReservationDetails: Record<number, ReservationDetail> = {
     capacity: 8,
     currentNum: 3,
     sessionStatus: 'RECRUITING',
+    reservationCode: 'test',
   },
 };
