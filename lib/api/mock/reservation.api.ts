@@ -11,7 +11,7 @@ export const reservationApiMock: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<number> => {
+  ): Promise<string> => {
     loadReservations(demoReservationDetails);
 
     const newId = Date.now();
@@ -39,34 +39,36 @@ export const reservationApiMock: ReservationApi = {
       capacity: session.capacity ?? 0,
       currentNum: (session.currentNum ?? 0) + 1,
       sessionStatus: session.status ?? '',
+      reservationCode: 'test',
     };
 
     saveReservations(demoReservationDetails);
-    return newId;
+    return newId.toString();
   },
 
-  search: async (name: string, phone: string, password: string): Promise<ReservationDetail[]> => {
+  search: async (name: string, phone: string): Promise<ReservationDetail[]> => {
     loadReservations(demoReservationDetails);
     return Object.values(demoReservationDetails).filter(
       (r) => r.applicantName === name && r.phoneNumber === phone
     );
   },
 
-  getById: async (reservationId: number | string): Promise<ReservationDetail> => {
+  getByCode: async (reservationCode: string): Promise<ReservationDetail> => {
     loadReservations(demoReservationDetails);
-    const id =
-      typeof reservationId === 'string' ? parseInt(reservationId) : reservationId;
-    const detail = demoReservationDetails[id];
+    const detail = Object.values(demoReservationDetails).find(
+      (r) => r.reservationCode === reservationCode
+    );
     if (!detail) throw new Error('예약 정보를 찾을 수 없습니다.');
     return detail;
   },
 
-  cancel: async (reservationId: number | string): Promise<void> => {
+  cancel: async (reservationCode: string): Promise<void> => {
     loadReservations(demoReservationDetails);
-    const id =
-      typeof reservationId === 'string' ? parseInt(reservationId) : reservationId;
-    if (demoReservationDetails[id]) {
-      delete demoReservationDetails[id];
+    const detail = Object.values(demoReservationDetails).find(
+      (r) => r.reservationCode === reservationCode
+    );
+    if (detail) {
+      delete demoReservationDetails[detail.reservationId];
       saveReservations(demoReservationDetails);
     }
   },
