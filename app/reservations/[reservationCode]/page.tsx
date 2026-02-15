@@ -66,10 +66,6 @@ export default function ReservationDetailPage() {
                             <h2 className="text-2xl font-bold text-red-600 leading-tight mb-2">
                                 예약이<br />취소되었습니다.
                             </h2>
-                            <p className="text-sm text-[#8B95A1]">
-                                해당 예약은 취소 처리되었습니다.<br />
-                                새로운 예약을 원하시면 다시 신청해주세요.
-                            </p>
                         </div>
                     ) : (
                         <div>
@@ -100,7 +96,8 @@ export default function ReservationDetailPage() {
                                 <span className="text-red-600 font-bold text-sm">⚠️ 취소된 예약</span>
                             </div>
                             <p className="text-xs text-red-600 mt-1">
-                                이 예약은 취소 처리되어 더 이상 유효하지 않습니다.
+                                이 예약은 취소 처리되어 더 이상 유효하지 않습니다. <br />
+                                새로운 예약을 원하시면 다시 신청해주세요.
                             </p>
                         </div>
                     )}

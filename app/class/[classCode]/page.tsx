@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { classApi, reservationApi, ClassDetailResponse, SessionResponse } from '@/lib/api';
 
 // Components
@@ -142,15 +141,10 @@ export default function ClassEnrollmentPage() {
                     <h2 className="text-2xl font-bold text-[#191F28] mb-3">
                         접근할 수 없는 클래스입니다
                     </h2>
-                    <p className="text-[#6B7684] leading-relaxed mb-6">
+                    <p className="text-[#6B7684] leading-relaxed">
                         이 클래스는 현재 링크 공유가 비활성화되어 있어<br />
                         신청을 받지 않고 있습니다.
                     </p>
-                    <Link href="/reservations">
-                        <Button fullWidth variant="secondary">
-                            예약 내역 확인하기
-                        </Button>
-                    </Link>
                 </div>
             </div>
         );
@@ -166,14 +160,9 @@ export default function ClassEnrollmentPage() {
                     <h2 className="text-2xl font-bold text-[#191F28] mb-3">
                         존재하지 않는 클래스입니다
                     </h2>
-                    <p className="text-[#6B7684] leading-relaxed mb-6">
+                    <p className="text-[#6B7684] leading-relaxed">
                         잘못된 링크이거나 삭제된 클래스입니다.
                     </p>
-                    <Link href="/reservations">
-                        <Button fullWidth variant="secondary">
-                            예약 내역 확인하기
-                        </Button>
-                    </Link>
                 </div>
             </div>
         );
