@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { reservationApi, ReservationDetail } from '@/lib/api';
+import { reservationApi, paymentApi, ReservationDetail } from '@/lib/api';
 import { MessageCircle } from 'lucide-react';
 
 // Components
@@ -30,14 +30,42 @@ export default function ReservationDetailPage() {
             });
     }, [reservationCode, router]);
 
+    const [isCancelling, setIsCancelling] = useState(false);
+
     const handleCancel = async () => {
+        if (isCancelling || !detail) return;
+        setIsCancelling(true);
         try {
+            // 1. 결제 내역 확인 및 명시적 취소 요청
+            try {
+                const payment = await paymentApi.getByReservationId(detail.reservationId);
+
+                // 결제가 완료된 상태이고 TID(거래번호)가 있는 경우에만 결제 취소 진행
+                if (payment && payment.tid && payment.status === 'COMPLETED') {
+                    console.log('결제 취소 시도 (TID):', payment.tid);
+                    await paymentApi.cancel({
+                        tid: payment.tid,
+                        amount: payment.amount,
+                        reason: '고객 직접 예약 취소'
+                    });
+                    console.log('결제 취소 성공');
+                }
+            } catch (payError) {
+                // 결제 정보가 없거나 이미 취소된 경우 에러가 발생할 수 있으므로 로그만 남기고 차단하지 않음
+                console.log('결제 취소 건너뜀 (내역 없음 혹은 이미 취소됨):', payError);
+            }
+
+            // 2. 예약 취소 호출
             await reservationApi.cancel(reservationCode as string);
+
             setShowCancelModal(false);
+            alert('예약 및 결제가 취소되었습니다.');
             window.location.reload();
         } catch (e) {
             setShowCancelModal(false);
             alert(e instanceof Error ? e.message : '서버 오류가 발생했습니다.');
+        } finally {
+            setIsCancelling(false);
         }
     };
 
@@ -198,9 +226,9 @@ export default function ReservationDetailPage() {
                                 onClick={() => setShowCancelModal(true)}
                                 fullWidth
                                 variant="danger"
-                                disabled={!canCancel()}
+                                disabled={!canCancel() || isCancelling}
                             >
-                                예약 취소하기
+                                {isCancelling ? '취소 처리 중...' : '예약 취소하기'}
                             </Button>
                             {!canCancel() && (
                                 <p className="text-center text-xs text-[#8B95A1]">

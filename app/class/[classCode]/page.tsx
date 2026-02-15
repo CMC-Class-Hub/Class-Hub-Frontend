@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { classApi, reservationApi, ClassDetailResponse, SessionResponse } from '@/lib/api';
+import { classApi, reservationApi, paymentApi, ClassDetailResponse, SessionResponse } from '@/lib/api';
 
 // Components
 import { Button } from '@/components/ui/Button';
@@ -80,9 +80,12 @@ export default function ClassEnrollmentPage() {
         }
     };
 
-    // 2. 예약 신청하기
+    // 로딩 상태 추가 필요 (컴포넌트 상단에 추가)
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // 2. 예약 신청하기 -> 결제 플로우로 변경
     const handleReserve = async () => {
-        if (!selectedSessionId || !applicantName || !phoneNumber || !classDetail) return;
+        if (!selectedSessionId || !applicantName || !phoneNumber || !classDetail || isSubmitting) return;
 
         // 약관 동의 확인
         if (!agreedToPrivacy) {
@@ -91,13 +94,18 @@ export default function ClassEnrollmentPage() {
         }
 
         setErrorMessage('');
+        setIsSubmitting(true);
 
         const isAvailable = await verifyLinkAvailability();
-        if (!isAvailable) return;
+        if (!isAvailable) {
+            setIsSubmitting(false);
+            return;
+        }
 
         const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
         if (cleanNumber.length < 9 || cleanNumber.length > 11) {
             setErrorMessage("올바른 전화번호를 입력해주세요.");
+            setIsSubmitting(false);
             return;
         }
 
@@ -107,15 +115,63 @@ export default function ClassEnrollmentPage() {
         ).replace("--", "-");
 
         try {
-            const reservationCode = await reservationApi.create(classDetail.id, {
+            // 1단계: 예약 생성
+            const reservationResult = await reservationApi.create(classDetail.id, {
                 sessionId: selectedSessionId,
                 applicantName,
                 phoneNumber: formattedPhone
             });
-            setCompletedReservationCode(reservationCode);
-            setStep('COMPLETED');
-            window.scrollTo(0, 0);
+
+            // 예약 ID 추출 (백엔드에서 reservationCode와 classCode를 포함한 객체를 반환함)
+            const { reservationCode } = reservationResult;
+
+            // 예약 상세 정보 가져오기 (결제 금액 확인 및 classCode 확보를 위해)
+            const reservationDetail = await reservationApi.getByCode(reservationCode);
+
+            // 2단계: 결제 생성 (결제 준비 단계)
+            const selectedSession = getSelectedSession();
+            const amount = selectedSession?.price || 0;
+
+            if (amount <= 0) {
+                // 가격이 0원이면 결제 없이 예약 완료
+                setCompletedReservationCode(reservationCode);
+                setStep('COMPLETED');
+                window.scrollTo(0, 0);
+                setIsSubmitting(false);
+                return;
+            }
+
+            const orderId = crypto.randomUUID();
+
+            // reservationDetail.reservationId 사용
+            const resId = reservationDetail.reservationId;
+
+            console.log('결제 준비 요청 데이터:', {
+                reservationId: resId,
+                amount: amount,
+                orderId: orderId,
+            });
+
+            await paymentApi.create({
+                reservationId: resId,
+                amount: amount,
+                orderId: orderId,
+            });
+
+            // 3단계: 결제 페이지로 리다이렉트
+            const paymentParams = new URLSearchParams({
+                orderId: orderId,
+                amount: amount.toString(),
+                goodsName: classDetail.name || `클래스 #${classDetail.id}`,
+                buyerName: applicantName,
+                buyerTel: formattedPhone,
+                reservationCode: reservationCode,
+            });
+
+            router.push(`/payment?${paymentParams.toString()}`);
+
         } catch (e) {
+            setIsSubmitting(false);
             setErrorMessage(e instanceof Error ? e.message : '서버 연결에 실패했습니다.');
         }
     };
@@ -365,7 +421,7 @@ export default function ClassEnrollmentPage() {
                                 const isAvailable = await verifyLinkAvailability();
                                 if (isAvailable) setStep('INPUT');
                             }}
-                            disabled={!selectedSessionId}
+                            disabled={!selectedSessionId || isSubmitting}
                             fullWidth
                             variant={!selectedSessionId ? "secondary" : "primary"}
                         >
@@ -374,11 +430,11 @@ export default function ClassEnrollmentPage() {
                     ) : (
                         <Button
                             onClick={handleReserve}
-                            disabled={!applicantName || !phoneNumber || !agreedToPrivacy}
+                            disabled={!applicantName || !phoneNumber || !agreedToPrivacy || isSubmitting}
                             fullWidth
                             variant={(!applicantName || !phoneNumber || !agreedToPrivacy) ? "secondary" : "primary"}
                         >
-                            예약하기
+                            {isSubmitting ? '처리 중...' : '예약하기'}
                         </Button>
                     )}
                 </div>
