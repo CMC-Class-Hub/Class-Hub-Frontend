@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { reservationApi, ReservationDetail } from '@/lib/api';
+import { MessageCircle } from 'lucide-react';
 
 // Components
 import { Header } from '@/components/ui/Header';
@@ -72,13 +73,23 @@ export default function ReservationDetailPage() {
                         </div>
                     ) : (
                         <div>
-                            <h2 className="text-2xl font-bold text-[#191F28] leading-tight mb-2">
+                            <h2 className="text-2xl font-bold text-[#191F28] leading-tight mb-6">
                                 예약이<br />확정되었습니다.
                             </h2>
-                            <p className="text-sm text-[#8B95A1]">
-                                예약하신 클래스 정보입니다.<br />
-                                변동 사항이 있을 시 강사님이 연락드릴 예정입니다.
-                            </p>
+
+                            {/* 카카오톡 알림톡 안내 메시지 */}
+                            <div className="bg-[#FEE500]/10 border border-[#FEE500]/20 rounded-xl p-4 flex items-start gap-3">
+                                <div className="bg-[#FEE500] p-1.5 rounded-full shrink-0">
+                                    <MessageCircle className="w-3.5 h-3.5 text-[#3A1D1D]" fill="#3A1D1D" />
+                                </div>
+                                <div className="text-sm text-[#333D4B]">
+                                    <p className="font-bold mb-1 text-[#3A1D1D]">카카오톡 알림톡이 발송되었습니다</p>
+                                    <p className="text-[#595959] text-xs leading-relaxed">
+                                        발송된 알림톡의 링크를 통해 언제든지<br />
+                                        예약 상세 내용을 확인하고 취소하실 수 있어요.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     )}
 
