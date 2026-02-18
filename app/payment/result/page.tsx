@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { paymentApi, reservationApi, ReservationDetail } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import { useAlert } from '@/lib/contexts/AlertContext';
 
 function PaymentResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { showAlert } = useAlert();
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -186,7 +188,7 @@ function PaymentResultContent() {
             if (code) {
               router.push(`/reservations/${code}`);
             } else {
-              alert('예약 번호를 찾을 수 없습니다.');
+              showAlert({ title: '오류', description: '예약 번호를 찾을 수 없습니다.' });
             }
           }}
           fullWidth

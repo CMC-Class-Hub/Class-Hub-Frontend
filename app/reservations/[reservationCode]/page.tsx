@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { reservationApi, paymentApi, ReservationDetail } from '@/lib/api';
 import { MessageCircle } from 'lucide-react';
+import { useAlert } from '@/lib/contexts/AlertContext';
 
 // Components
 import { Header } from '@/components/ui/Header';
@@ -13,6 +14,7 @@ import { ConfirmModal } from '@/components/ui/ConfirmModal';
 export default function ReservationDetailPage() {
     const { reservationCode } = useParams();
     const router = useRouter();
+    const { showAlert } = useAlert();
     const [detail, setDetail] = useState<ReservationDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [showCancelModal, setShowCancelModal] = useState(false);
@@ -25,8 +27,11 @@ export default function ReservationDetailPage() {
                 setLoading(false);
             })
             .catch(() => {
-                alert('잘못된 접근입니다.');
-                router.push('/');
+                showAlert({
+                    title: '오류',
+                    description: '잘못된 접근입니다.',
+                    onConfirm: () => router.push('/')
+                });
             });
     }, [reservationCode, router]);
 
@@ -56,11 +61,17 @@ export default function ReservationDetailPage() {
             // 2. 예약 취소 호출
 
             setShowCancelModal(false);
-            alert('예약 및 결제가 취소되었습니다.');
-            window.location.reload();
+            showAlert({
+                title: '취소 완료',
+                description: '예약 및 결제가 취소되었습니다.',
+                onConfirm: () => window.location.reload()
+            });
         } catch (e) {
             setShowCancelModal(false);
-            alert(e instanceof Error ? e.message : '서버 오류가 발생했습니다.');
+            showAlert({
+                title: '오류',
+                description: e instanceof Error ? e.message : '서버 오류가 발생했습니다.'
+            });
         } finally {
             setIsCancelling(false);
         }

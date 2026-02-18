@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Script from 'next/script';
+import { useAlert } from '@/lib/contexts/AlertContext';
 
 interface NicepayFormProps {
   clientId: string;
@@ -26,11 +27,12 @@ export const NicepayForm: React.FC<NicepayFormProps> = ({
   buyerTel,
   returnUrl,
 }) => {
+  const { showAlert } = useAlert();
   const hasRequested = React.useRef(false);
 
   const handlePay = () => {
     if (!window.AUTHNICE) {
-      alert('결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+      showAlert({ title: '알림', description: '결제 모듈을 불러오는 중입니다. 잠시 후 다시 시도해주세요.' });
       return;
     }
 
@@ -48,7 +50,7 @@ export const NicepayForm: React.FC<NicepayFormProps> = ({
       buyerTel: buyerTel,
       fnError: function (result: any) {
         hasRequested.current = false;
-        alert('결제 오류: ' + result.errorMsg);
+        showAlert({ title: '결제 오류', description: result.errorMsg });
       }
     });
   };
