@@ -19,10 +19,6 @@ function PaymentResultContent() {
     const reservationCode = searchParams.get('reservationCode');
     const resultCode = searchParams.get('resultCode') || searchParams.get('ResultCode');
 
-    console.log('=== [결제 결과 페이지] 파라미터 확인 ===');
-    console.log('URL 전체 파라미터:', Object.fromEntries(searchParams.entries()));
-    console.log('추출된 값 -> orderId:', orderId, 'reservationCode:', reservationCode, 'resultCode:', resultCode);
-
     if (!reservationCode) {
       console.warn('reservationCode가 없습니다. 로직을 중단합니다.');
       setErrorMessage('예약 정보가 누락되었습니다.');
@@ -31,19 +27,16 @@ function PaymentResultContent() {
     }
 
     const processPayment = async () => {
-      console.log('--- 결제 처리 함수(processPayment) 실행 ---');
       try {
         const isSuccessParam = searchParams.get('success') === 'true';
         const isFailureParam = searchParams.get('success') === 'false';
 
         // 1. 백엔드에서 명시적으로 성공/실패 여부를 보낸 경우 (이미 승인 완료된 케이스)
         if (isSuccessParam) {
-          console.log('상태: 백엔드 승인 완료 확인 (success=true)');
           setSuccess(true);
           const detail = await reservationApi.getByCode(reservationCode);
           setReservation(detail);
         } else if (isFailureParam) {
-          console.log('상태: 결제 실패 확인 (success=false)');
           setSuccess(false);
           setErrorMessage(searchParams.get('resultMsg') || '결제 처리에 실패했습니다.');
           // 실패 시에도 classCode 확보를 위해 예약 정보 조회 시도 (버튼 복구용)
@@ -56,7 +49,6 @@ function PaymentResultContent() {
         }
         // 2. 예외 케이스: resultCode가 있지만 success 파라미터가 없는 경우 (기존 로직 유지)
         else if (resultCode) {
-          console.log('상태: 나이스페이 리다이렉트 응답 감지 (resultCode 존재)');
           const params: Record<string, string> = {};
           searchParams.forEach((value, key) => {
             params[key] = value;
@@ -74,7 +66,6 @@ function PaymentResultContent() {
         }
         // 3. 직접 접근 시 orderId로 상태 조회
         else if (orderId) {
-          console.log('직접 접근 또는 재조회 시도. OrderId:', orderId);
           const payment = await paymentApi.getByOrderId(orderId);
           if (payment.status === 'COMPLETED') {
             setSuccess(true);
@@ -93,7 +84,6 @@ function PaymentResultContent() {
         setErrorMessage(e instanceof Error ? e.message : '처리 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
-        console.log('--- 결제 프로세스 종료 ---');
       }
     };
 

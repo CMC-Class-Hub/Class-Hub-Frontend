@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
       data[key] = value.toString();
     });
 
-    console.log('--- Nicepay Callback Bridge ---');
-    console.log('Received POST Data:', data);
 
     // URL의 쿼리 스트링에서 reservationCode 가져오기
     const { searchParams } = new URL(request.url);
@@ -39,8 +37,6 @@ export async function POST(request: NextRequest) {
     if (data.cardCode) redirectUrl.searchParams.set('cardCode', data.cardCode);
     if (data.cardName) redirectUrl.searchParams.set('cardName', data.cardName);
     if (data.cardNum) redirectUrl.searchParams.set('cardNum', data.cardNum);
-
-    console.log('Redirecting to:', redirectUrl.toString());
 
     return NextResponse.redirect(redirectUrl, { status: 303 });
   } catch (error) {

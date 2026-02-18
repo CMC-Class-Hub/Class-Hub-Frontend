@@ -41,7 +41,6 @@ export default function ClassEnrollmentPage() {
         if (!classCode) return;
         classApi.getByClassCode(classCode as string)
             .then(async (data) => {
-                console.log(data);
                 if (data.linkShareStatus !== 'ENABLED') {
                     setLinkDisabled(true);
                     setLoading(false);
@@ -123,7 +122,7 @@ export default function ClassEnrollmentPage() {
             });
 
             // 예약 ID 추출 (백엔드에서 reservationCode와 classCode를 포함한 객체를 반환함)
-            const { reservationCode } = reservationResult;
+            const reservationCode = reservationResult.reservationCode;
 
             // 예약 상세 정보 가져오기 (결제 금액 확인 및 classCode 확보를 위해)
             const reservationDetail = await reservationApi.getByCode(reservationCode);
@@ -145,12 +144,6 @@ export default function ClassEnrollmentPage() {
 
             // reservationDetail.reservationId 사용
             const resId = reservationDetail.reservationId;
-
-            console.log('결제 준비 요청 데이터:', {
-                reservationId: resId,
-                amount: amount,
-                orderId: orderId,
-            });
 
             await paymentApi.create({
                 reservationId: resId,

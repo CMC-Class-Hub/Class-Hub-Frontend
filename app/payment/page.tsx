@@ -51,10 +51,8 @@ function PaymentContent() {
 
   // 백엔드 컨트롤러에 새로 만든 clientAuth 엔드포인트로 설정
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
-  console.log('backendUrl:', backendUrl);
   const returnUrl = `${backendUrl}/api/payments/clientAuth`;
 
-  console.log('결제창 호출 returnUrl:', returnUrl);
   return (
     <NicepayForm
       clientId={clientId}

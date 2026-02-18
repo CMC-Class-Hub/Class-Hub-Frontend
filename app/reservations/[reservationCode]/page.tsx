@@ -39,10 +39,8 @@ export default function ReservationDetailPage() {
             // 1. 결제 내역 확인 및 명시적 취소 요청
             try {
                 const payment = await paymentApi.getByReservationId(detail.reservationId);
-
                 // 결제가 완료된 상태이고 TID(거래번호)가 있는 경우에만 결제 취소 진행
                 if (payment && payment.tid && payment.status === 'COMPLETED') {
-                    console.log('결제 취소 시도 (TID):', payment.tid);
                     await paymentApi.cancel({
                         tid: payment.tid,
                         amount: payment.amount,
@@ -56,7 +54,6 @@ export default function ReservationDetailPage() {
             }
 
             // 2. 예약 취소 호출
-            await reservationApi.cancel(reservationCode as string);
 
             setShowCancelModal(false);
             alert('예약 및 결제가 취소되었습니다.');
