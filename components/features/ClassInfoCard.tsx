@@ -102,12 +102,11 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
                                     href={classDetail.instructorProfileUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-3 py-1.5 bg-white border border-[#F2F4F6] text-[#4E5968] text-[11px] font-bold rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] hover:bg-[#F9FAFB] transition-all flex items-center gap-2 group"
+                                    className="flex items-center gap-1 text-[#8B95A1] hover:text-[#4E5968] text-xs font-medium transition-colors"
                                 >
-                                    <span className="w-1.5 h-1.5 bg-[#3182F6] rounded-full animate-pulse" />
                                     {classDetail.instructorName ? `${classDetail.instructorName} 강사님` : '강사'} 프로필
-                                    <svg className="w-2.5 h-2.5 text-[#8B95A1] group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                 </a>
                             )}
