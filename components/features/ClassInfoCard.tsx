@@ -17,13 +17,13 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
     const hasMultipleImages = images.length > 1;
 
     const handlePrevImage = () => {
-        setCurrentImageIndex((prev) => 
+        setCurrentImageIndex((prev) =>
             prev === 0 ? images.length - 1 : prev - 1
         );
     };
 
     const handleNextImage = () => {
-        setCurrentImageIndex((prev) => 
+        setCurrentImageIndex((prev) =>
             prev === images.length - 1 ? 0 : prev + 1
         );
     };
@@ -39,7 +39,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
                         className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    
+
                     {/* 이미지 네비게이션 - 이미지가 2개 이상일 때만 표시 */}
                     {hasMultipleImages && (
                         <>
@@ -53,7 +53,7 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
                             </button>
-                            
+
                             {/* 다음 버튼 */}
                             <button
                                 onClick={handleNextImage}
@@ -64,18 +64,17 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
-                            
+
                             {/* 인디케이터 점들 */}
                             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                                 {images.map((_, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setCurrentImageIndex(index)}
-                                        className={`w-2 h-2 rounded-full transition-all ${
-                                            index === currentImageIndex
-                                                ? 'bg-white w-6'
-                                                : 'bg-white/60'
-                                        }`}
+                                        className={`w-2 h-2 rounded-full transition-all ${index === currentImageIndex
+                                            ? 'bg-white w-6'
+                                            : 'bg-white/60'
+                                            }`}
                                         aria-label={`이미지 ${index + 1}로 이동`}
                                     />
                                 ))}
@@ -93,10 +92,25 @@ export const ClassInfoCard: React.FC<ClassInfoCardProps> = ({
             <div className="px-5 pt-8 pb-4">
                 {showHeader && (
                     <div className="space-y-4">
-                        <div>
+                        <div className="flex justify-between items-center">
                             <span className="inline-block px-2.5 py-1 bg-[#E8F3FF] text-[#3182F6] text-[11px] font-bold rounded-md">
                                 원데이 클래스
                             </span>
+
+                            {classDetail.instructorProfileUrl && (
+                                <a
+                                    href={classDetail.instructorProfileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-1.5 bg-white border border-[#F2F4F6] text-[#4E5968] text-[11px] font-bold rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.08)] hover:bg-[#F9FAFB] transition-all flex items-center gap-2 group"
+                                >
+                                    <span className="w-1.5 h-1.5 bg-[#3182F6] rounded-full animate-pulse" />
+                                    {classDetail.instructorName ? `${classDetail.instructorName} 강사님` : '강사'} 프로필
+                                    <svg className="w-2.5 h-2.5 text-[#8B95A1] group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            )}
                         </div>
 
                         <h1 className="text-2xl font-bold text-[#191F28] leading-snug">
