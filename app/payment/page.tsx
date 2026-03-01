@@ -47,7 +47,7 @@ function PaymentContent() {
   }
 
   // 나이스페이먼츠 클라이언트 ID
-  const clientId = process.env.NEXT_PUBLIC_NICEPAY_CLIENT_ID || 'S1_6eaa0db1afdc41f3becb770878d67d25';
+  const clientId = process.env.NEXT_PUBLIC_NICEPAY_CLIENT_ID || 'S1_dfd812aa02c542dbac5edcd72a3b1eca';
 
   // 백엔드 컨트롤러에 새로 만든 clientAuth 엔드포인트로 설정
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
