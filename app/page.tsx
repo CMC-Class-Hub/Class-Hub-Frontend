@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 export default function Home() {
   const router = useRouter();
@@ -56,30 +55,6 @@ export default function Home() {
           </button>
         </form>
 
-        <div className="h-px bg-gray-100 mb-8"></div>
-
-        {/* Menu Section */}
-        <div className="space-y-3">
-          <Link
-            href="/reservations"
-            className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm text-sm group-hover:scale-110 transition-transform">📅</span>
-              <span className="font-bold text-[#333D4B]">내 예약 확인하기</span>
-            </div>
-            <span className="text-gray-400 text-sm">→</span>
-          </Link>
-
-          {/* Future features placehoder */}
-          {/* <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group text-left">
-            <div className="flex items-center gap-3">
-              <span className="w-8 h-8 flex items-center justify-center bg-white rounded-lg shadow-sm text-sm group-hover:scale-110 transition-transform">✨</span>
-              <span className="font-bold text-[#333D4B]">인기 클래스 둘러보기</span>
-            </div>
-            <span className="text-[#3182F6] text-xs font-bold bg-blue-50 px-2 py-1 rounded">Coming Soon</span>
-          </button> */}
-        </div>
       </div>
 
       <p className="mt-8 text-xs text-[#B0B8C1] text-center">
