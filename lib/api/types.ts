@@ -101,6 +101,7 @@ export interface ReservationApi {
   getByCode: (reservationCode: string) => Promise<ReservationDetail>;
   cancel: (reservationCode: string) => Promise<void>;
   getBySessionId: (sessionId: number) => Promise<SessionReservationInfo[]>;
+  markAsPresent: (reservationCode: string) => Promise<void>;
 }
 
 export interface MemberApi {
