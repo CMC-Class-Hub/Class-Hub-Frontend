@@ -111,4 +111,5 @@ export default function AttendancePage() {
             `}</style>
     </div>
   );
+  
 }
