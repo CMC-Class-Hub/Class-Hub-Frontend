@@ -85,9 +85,4 @@ export const reservationApiMock: ReservationApi = {
     // Mock에서는 빈 배열 반환 또는 더미 로직
     return [];
   },
-
-  markAsPresent: async (reservationCode: string): Promise<void> => {
-    console.log(`[Mock] Marking ${reservationCode} as present`);
-    return new Promise((resolve) => setTimeout(resolve, 500));
-  },
 };
