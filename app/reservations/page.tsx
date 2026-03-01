@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { reservationApi, ReservationItem } from '@/lib/api';
+import { useAlert } from '@/lib/contexts/AlertContext';
 
 // Components
 import { Header } from '@/components/ui/Header';
@@ -12,6 +13,7 @@ import { ReservationResult } from '@/components/features/ReservationResult';
 
 export default function CheckReservationPage() {
     const router = useRouter();
+    const { showAlert } = useAlert();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [reservations, setReservations] = useState<ReservationItem[] | null>(null);
@@ -49,7 +51,7 @@ export default function CheckReservationPage() {
             const data = await reservationApi.search(name, formattedPhone);
             setReservations(data);
         } catch (error) {
-            alert('조회 중 오류가 발생했습니다.');
+            showAlert({ title: '오류', description: '조회 중 오류가 발생했습니다.' });
         } finally {
             setLoading(false);
         }

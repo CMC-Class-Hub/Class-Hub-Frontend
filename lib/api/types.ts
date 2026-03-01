@@ -78,6 +78,12 @@ export interface CreateReservationRequest {
   phoneNumber: string;
 }
 
+export interface CreateReservationResponse {
+  reservationCode: string;
+  classCode: string;
+}
+
+
 // 강사용 특정 세션 예약 정보
 export interface SessionReservationInfo {
   reservationId: number;
@@ -96,7 +102,7 @@ export interface ClassApi {
 }
 
 export interface ReservationApi {
-  create: (classId: number, data: CreateReservationRequest) => Promise<string>;
+  create: (classId: number, data: CreateReservationRequest) => Promise<CreateReservationResponse>;
   search: (name: string, phone: string) => Promise<ReservationItem[]>;
   getByCode: (reservationCode: string) => Promise<ReservationDetail>;
   cancel: (reservationCode: string) => Promise<void>;
@@ -108,4 +114,58 @@ export interface MemberApi {
   getById: (id: number) => Promise<MemberResponse>;
   create: (data: CreateMemberRequest) => Promise<void>;
   update: (id: number, data: UpdateMemberRequest) => Promise<void>;
+}
+
+// Payment 타입
+export type PaymentStatus = 'PENDING' | 'COMPLETED' | 'CANCELLED' | 'FAILED';
+export type PaymentMethod = 'CARD' | 'VBANK' | 'BANK' | 'CELLPHONE' | 'NAVERPAY' | 'KAKAOPAY' | 'PAYCO' | 'SSGPAY';
+
+export interface PaymentResponse {
+  id: number;
+  reservationId: number;
+  tid: string | null;
+  orderId: string;
+  amount: number;
+  status: PaymentStatus;
+  method?: PaymentMethod;
+  cardCode?: string;
+  cardName?: string;
+  cardNum?: string;
+  resultCode?: string;
+  resultMsg?: string;
+  approvedAt?: string;
+  cancelledAt?: string;
+  createdAt: string;
+}
+
+export interface CreatePaymentRequest {
+  reservationId: number;
+  amount: number;
+  orderId: string;
+  method?: PaymentMethod;
+  cardCode?: string;
+  cardName?: string;
+  cardNum?: string;
+}
+
+export interface CancelPaymentRequest {
+  tid: string;
+  amount?: number;
+  reason?: string;
+}
+
+export interface PaymentApprovalResponse {
+  success: boolean;
+  resultCode: string;
+  resultMsg: string;
+  payment: PaymentResponse;
+}
+
+export interface PaymentApi {
+  create: (data: CreatePaymentRequest) => Promise<PaymentResponse>;
+  approve: (params: Record<string, string>) => Promise<any>;
+  getByTid: (tid: string) => Promise<PaymentResponse>;
+  getByOrderId: (orderId: string) => Promise<PaymentResponse>;
+  getByReservationId: (reservationId: number) => Promise<PaymentResponse>;
+  cancel: (data: CancelPaymentRequest) => Promise<PaymentApprovalResponse>;
 }
