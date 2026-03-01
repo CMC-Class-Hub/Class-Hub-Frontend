@@ -1,7 +1,6 @@
 import {
   ReservationApi,
   CreateReservationRequest,
-  CreateReservationResponse,
   ReservationDetail,
   SessionReservationInfo,
 } from '../types';
@@ -12,7 +11,7 @@ export const reservationApiMock: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<CreateReservationResponse> => {
+  ): Promise<string> => {
     loadReservations(demoReservationDetails);
 
     const newId = Date.now();
@@ -24,8 +23,6 @@ export const reservationApiMock: ReservationApi = {
       (s) => s.id === data.sessionId
     );
     if (!session) throw new Error('세션을 찾을 수 없습니다.');
-
-    const reservationCode = `RES${newId}`;
 
     demoReservationDetails[newId] = {
       reservationId: newId,
@@ -43,15 +40,11 @@ export const reservationApiMock: ReservationApi = {
       capacity: session.capacity ?? 0,
       currentNum: (session.currentNum ?? 0) + 1,
       sessionStatus: session.status ?? '',
-      reservationCode: reservationCode,
+      reservationCode: 'test',
     };
 
     saveReservations(demoReservationDetails);
-
-    return {
-      reservationCode: reservationCode,
-      classCode: classItem.classCode ?? '',
-    };
+    return newId.toString();
   },
 
   search: async (name: string, phone: string): Promise<ReservationDetail[]> => {

@@ -2,7 +2,6 @@ import { API_URL } from '../api-config';
 import {
   ReservationApi,
   CreateReservationRequest,
-  CreateReservationResponse,
   ReservationDetail,
   SessionReservationInfo,
 } from '../types';
@@ -11,7 +10,7 @@ export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<CreateReservationResponse> => {
+  ): Promise<string> => {
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -31,8 +30,8 @@ export const reservationApiReal: ReservationApi = {
       }
       throw new Error(errorMessage);
     }
-
-    return res.json();
+    
+    return res.text();
   },
 
   search: async (name: string, phone: string): Promise<ReservationDetail[]> => {
