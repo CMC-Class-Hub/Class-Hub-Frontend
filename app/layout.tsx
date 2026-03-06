@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { AlertProvider } from "@/lib/contexts/AlertContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,7 +33,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AlertProvider>
+          {children}
+        </AlertProvider>
       </body>
     </html>
   );

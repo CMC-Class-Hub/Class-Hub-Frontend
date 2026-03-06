@@ -2,6 +2,7 @@ import { API_URL } from '../api-config';
 import {
   ReservationApi,
   CreateReservationRequest,
+  CreateReservationResponse,
   ReservationDetail,
   SessionReservationInfo,
 } from '../types';
@@ -10,7 +11,7 @@ export const reservationApiReal: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<string> => {
+  ): Promise<CreateReservationResponse> => {
     const res = await fetch(
       `${API_URL}/api/reservations?onedayClassId=${classId}`,
       {
@@ -30,8 +31,8 @@ export const reservationApiReal: ReservationApi = {
       }
       throw new Error(errorMessage);
     }
-    
-    return res.text();
+
+    return res.json();
   },
 
   search: async (name: string, phone: string): Promise<ReservationDetail[]> => {
@@ -59,5 +60,18 @@ export const reservationApiReal: ReservationApi = {
     const res = await fetch(`${API_URL}/api/reservations/session/${sessionId}`);
     if (!res.ok) throw new Error('세션별 예약 목록을 가져올 수 없습니다.');
     return res.json();
+  },
+
+  markAsPresent: async (reservationCode: string): Promise<void> => {
+    const res = await fetch(
+      `${API_URL}/api/reservations/${reservationCode}/attendance/present`,
+      {
+        method: 'PATCH',
+      }
+    );
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || '출석 처리에 실패했습니다.');
+    }
   },
 };

@@ -34,6 +34,9 @@ export const demoClasses: Record<string, ClassDetailResponse> = {
     parkingInfo: '주차 공간이 협소하니 가급적 대중교통 이용 부탁드립니다.',
     guidelines: '흙이 묻을 수 있으니 편한 복장으로 오세요.',
     policy: '당일 취소는 환불이 불가합니다.',
+    instructorId: 1,
+    instructorName: '김강사',
+    instructorProfileUrl: 'https://github.com/google',
     sessions: [
       {
         id: 1,

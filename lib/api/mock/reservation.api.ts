@@ -1,6 +1,7 @@
 import {
   ReservationApi,
   CreateReservationRequest,
+  CreateReservationResponse,
   ReservationDetail,
   SessionReservationInfo,
 } from '../types';
@@ -11,7 +12,7 @@ export const reservationApiMock: ReservationApi = {
   create: async (
     classId: number,
     data: CreateReservationRequest
-  ): Promise<string> => {
+  ): Promise<CreateReservationResponse> => {
     loadReservations(demoReservationDetails);
 
     const newId = Date.now();
@@ -23,6 +24,8 @@ export const reservationApiMock: ReservationApi = {
       (s) => s.id === data.sessionId
     );
     if (!session) throw new Error('세션을 찾을 수 없습니다.');
+
+    const reservationCode = `RES${newId}`;
 
     demoReservationDetails[newId] = {
       reservationId: newId,
@@ -40,11 +43,15 @@ export const reservationApiMock: ReservationApi = {
       capacity: session.capacity ?? 0,
       currentNum: (session.currentNum ?? 0) + 1,
       sessionStatus: session.status ?? '',
-      reservationCode: 'test',
+      reservationCode: reservationCode,
     };
 
     saveReservations(demoReservationDetails);
-    return newId.toString();
+
+    return {
+      reservationCode: reservationCode,
+      classCode: classItem.classCode ?? '',
+    };
   },
 
   search: async (name: string, phone: string): Promise<ReservationDetail[]> => {
@@ -77,5 +84,10 @@ export const reservationApiMock: ReservationApi = {
   getBySessionId: async (sessionId: number): Promise<SessionReservationInfo[]> => {
     // Mock에서는 빈 배열 반환 또는 더미 로직
     return [];
+  },
+
+  markAsPresent: async (reservationCode: string): Promise<void> => {
+    console.log(`[Mock] Marking ${reservationCode} as present`);
+    return new Promise((resolve) => setTimeout(resolve, 500));
   },
 };
