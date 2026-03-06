@@ -24,6 +24,8 @@ export interface ClassDetailResponse {
   guidelines?: string;
   policy?: string;
   instructorId?: number;
+  instructorName?: string;
+  instructorProfileUrl?: string;
   sessions?: SessionResponse[];
   linkShareStatus?: string;
   cancellationPolicy?: string;
